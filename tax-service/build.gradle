@@ -28,6 +28,8 @@ dependencyManagement {
 }
 
 dependencies {
+
+    implementation project(":common")
     // REST API & Validation (세금 계산·보고용 엔드포인트)
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'

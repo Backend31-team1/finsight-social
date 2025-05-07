@@ -28,6 +28,8 @@ dependencyManagement {
 }
 
 dependencies {
+
+    implementation project(":common")
     // REST API & Validation
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'

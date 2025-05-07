@@ -28,6 +28,8 @@ dependencyManagement {
 }
 
 dependencies {
+
+    implementation project(":common")
     // 코어 의존성
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
