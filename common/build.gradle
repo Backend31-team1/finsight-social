@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'io.spring.dependency-management'
+}
+
+group = 'com.project.common'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+dependencies {
+    // Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    // DTO 검증을 위한 Validation API
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // 공통 유틸 및 Bean 관리용 Spring Core
+    implementation 'org.springframework:spring-context'
+
+    // 공통 DTO 직렬화/역직렬화용 Jackson
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    // 자주 쓰는 유틸(문자열, 날짜 등)용 Apache Commons Lang
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+    // @ControllerAdvice 기반 GlobalExceptionHandler를 위해 Spring Web 제공
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Test utilities
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}

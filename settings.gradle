@@ -1,0 +1,11 @@
+rootProject.name = 'finsight-social'
+include 'auth-service'
+include 'portfolio-service'
+include 'price-service'
+include 'order-service'
+include 'report-service'
+include 'tax-service'
+include 'notification-service'
+include 'sns-service'
+include 'common'
+
