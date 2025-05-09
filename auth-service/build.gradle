@@ -48,6 +48,7 @@ dependencies {
     // 이메일 인증 (고민후선택)
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'io.github.openfeign:feign-okhttp'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.30'
@@ -56,6 +57,9 @@ dependencies {
     // 테스트
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
+    //랜덤 코드 생성
+    implementation 'org.apache.commons:commons-text:1.10.0'
 }
 
 tasks.named('test') {
