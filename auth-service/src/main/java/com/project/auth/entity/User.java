@@ -1,8 +1,11 @@
 package com.project.auth.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.common.UserRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,7 +25,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(
-    name = "User",
+    name = "users",
     uniqueConstraints = {
         @UniqueConstraint(columnNames = "email"),
         @UniqueConstraint(columnNames = "nickname")
@@ -60,6 +63,10 @@ public class User {
 
   @Column(nullable = false)
   private boolean emailVerified;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private UserRole role = UserRole.USER;
 
   @Column(length = 64)
   private String verificationCode;

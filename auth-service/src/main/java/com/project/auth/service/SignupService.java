@@ -8,6 +8,7 @@ import static com.project.common.exception.ErrorCode.WRONG_VERIFICATION;
 import com.project.auth.dto.SignupForm;
 import com.project.auth.entity.User;
 import com.project.auth.repository.UserRepository;
+import com.project.common.UserRole;
 import com.project.common.exception.CustomException;
 import com.project.common.exception.ErrorCode;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,16 +25,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class SignupService {
 
   private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
   // 클라이언트 입력정보로 부터 회원가입 ( DB 저장 )
   public User userSignup(SignupForm form) {
+
+    UserRole role = UserRole.USER; // 클라이언트 입력에 의존하지 않음
+
     return userRepository.save(User.builder()
         .email(form.getEmail().toLowerCase(Locale.ROOT))
-        .password(form.getPassword())
+        // 비밀번호는 암호화 처리해서 저장
+        .password(passwordEncoder.encode(form.getPassword()))
         .name(form.getName())
         .birth(form.getBirth())
         .nickname(form.getNickname().toLowerCase(Locale.ROOT))
         .emailVerified(false)
+        .role(role)
         .build());
   }
 
