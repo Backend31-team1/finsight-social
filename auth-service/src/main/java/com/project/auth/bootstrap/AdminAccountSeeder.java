@@ -34,7 +34,7 @@ public class AdminAccountSeeder implements ApplicationRunner {
   public void run(ApplicationArguments args) {
     if (!repo.findByEmail(adminEmail).isPresent()) {
       repo.save(User.builder()
-          .email("admin@yourdomain.com")
+          .email(adminEmail)
           .password(pe.encode(adminRawPwd))
           .name("관리자")
           .nickname("admin")
