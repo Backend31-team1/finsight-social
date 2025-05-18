@@ -36,6 +36,13 @@ public class CashAccountService {
         return toDto(saved);
     }
 
+    //계좌 조회
+    public CashAccountDto getAccountByUserId(Long userId) {
+        CashAccount account = cashAccountRepository.findByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        return toDto(account);
+    }
+
     //Entity -> Dto 변환
     private CashAccountDto toDto(CashAccount account) {
         return CashAccountDto.builder()
