@@ -47,12 +47,16 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             // 인증 없이 열어줄 경로
             .requestMatchers(
-                "/signin",
-                "/signup",
-                "/signup/verify",
+                "/auth/signin",
+                "/auth/signup",
+                "/auth/signup/verify",
+                "/auth/refresh",
                 "/swagger-ui/**",
                 "/v3/api-docs/**"
             ).permitAll()
+            // 로그아웃
+            .requestMatchers("/auth/logout")
+            .authenticated()
             // ADMIN 권한이 필요한 URL
             .requestMatchers("/admin/**")
             .hasRole("ADMIN")
