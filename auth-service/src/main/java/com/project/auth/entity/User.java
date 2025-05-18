@@ -73,7 +73,7 @@ public class User {
 
   private LocalDateTime verifyExpiredAt;
 
-  @Column(length = 500)
+  @Column(name = "profile_photo_url")
   private String profilePhotoUrl;
 
   @CreationTimestamp
