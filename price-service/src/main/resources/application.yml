@@ -1,6 +1,8 @@
 spring:
+  config:
+    import: optional:classpath:application-secret.yml
   datasource:
-    url: jdbc:postgresql://db:5432/finsight
+    url: jdbc:postgresql://localhost:5432/finsight
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   jpa:
