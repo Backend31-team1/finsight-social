@@ -1,5 +1,6 @@
 package com.project.sns.service;
 
+import com.project.sns.controller.NotificationSocketController;
 import com.project.sns.dto.CommentRequestDto;
 import com.project.sns.dto.CommentResponseDto;
 import com.project.sns.entity.Comment;
@@ -21,6 +22,7 @@ public class CommentService {
 
   private final CommentRepository commentRepository;
   private final NotificationRepository notificationRepository;
+  private final NotificationSocketController notificationSocketController;
 
   /**
    * 댓글 또는 대댓글을 생성합니다.
@@ -40,6 +42,13 @@ public class CommentService {
 
     // 댓글 저장
     commentRepository.save(comment);
+
+    // WebSocket 실시간 알림 전송
+    Long postWriterId = 2L; // TODO: 실제 게시글 작성자의 ID로 변경 필요
+    notificationSocketController.sendNotification(
+        postWriterId,
+        "회원님의 게시글에 댓글이 달렸습니다."
+    );
 
     // 🟡 댓글 작성 시 알림 생성 로직 (NotificationService 분리 가능)
     Notification notification = new Notification();
