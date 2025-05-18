@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/auth/cash-account")
 @RequiredArgsConstructor
@@ -19,8 +21,8 @@ public class CashAccountController {
     }
 
     //계좌 조회
-    @GetMapping("/get")
-    public ResponseEntity<CashAccountDto> getAccount(@RequestParam Long userId) {
-        return ResponseEntity.ok(cashAccountService.getAccountByUserId(userId));
+    @GetMapping("/list")
+    public ResponseEntity<List<CashAccountDto>> getAccountsByUser(@RequestParam Long userId) {
+        return ResponseEntity.ok(cashAccountService.getAccountsByUserId(userId));
     }
 }

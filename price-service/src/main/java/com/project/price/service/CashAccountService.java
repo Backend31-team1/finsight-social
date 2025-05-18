@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,10 +38,9 @@ public class CashAccountService {
     }
 
     //계좌 조회
-    public CashAccountDto getAccountByUserId(Long userId) {
-        CashAccount account = cashAccountRepository.findByUserId(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
-        return toDto(account);
+    public List<CashAccountDto> getAccountsByUserId(Long userId) {
+        List<CashAccount> accounts = cashAccountRepository.findAllByUserId(userId);
+        return accounts.stream().map(this::toDto).toList();
     }
 
     //Entity -> Dto 변환
