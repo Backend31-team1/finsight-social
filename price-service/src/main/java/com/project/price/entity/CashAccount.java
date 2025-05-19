@@ -1,6 +1,5 @@
 package com.project.price.entity;
 
-import com.project.auth.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,9 +21,8 @@ public class CashAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long AccountId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal balance;

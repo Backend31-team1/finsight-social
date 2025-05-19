@@ -20,7 +20,23 @@ jar {
     enabled = true
 }
 
+ext {
+    set('springCloudAwsVersion', "3.3.0")
+}
+
+dependencyManagement {
+    imports {
+        // Spring Cloud AWS BOM
+        mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:${springCloudAwsVersion}"
+    }
+}
+
 dependencies {
+
+    // AWS S3 자동 설정(Starter) + SDK v2
+    implementation "io.awspring.cloud:spring-cloud-aws-starter-s3"
+    implementation "software.amazon.awssdk:s3"
+
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
