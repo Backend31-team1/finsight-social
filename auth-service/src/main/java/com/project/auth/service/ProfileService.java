@@ -4,7 +4,6 @@ import com.project.auth.entity.User;
 import com.project.auth.repository.UserRepository;
 import com.project.common.exception.CustomException;
 import com.project.common.exception.ErrorCode;
-import com.project.common.storage.S3StorageService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

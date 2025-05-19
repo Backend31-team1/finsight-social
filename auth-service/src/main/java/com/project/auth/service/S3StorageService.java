@@ -1,4 +1,4 @@
-package com.project.common.storage;
+package com.project.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

@@ -30,6 +30,7 @@ dependencyManagement {
 dependencies {
 
     implementation project(":common")
+
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
     // Spring Cloud AWS S3 스타터 (v2 → AWS SDK v2 기반)
