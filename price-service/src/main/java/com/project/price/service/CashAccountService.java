@@ -1,9 +1,7 @@
 package com.project.price.service;
 
-import com.project.auth.entity.User;
-import com.project.auth.repository.UserRepository;
-import com.project.common.exception.CustomException;
-import com.project.common.exception.ErrorCode;
+import com.project.common.dto.UserIdDto;
+import com.project.price.client.UserClient;
 import com.project.price.dto.CashAccountDto;
 import com.project.price.entity.CashAccount;
 import com.project.price.repository.CashAccountRepository;
@@ -19,15 +17,14 @@ import java.util.List;
 public class CashAccountService {
 
     private final CashAccountRepository cashAccountRepository;
-    private final UserRepository userRepository;
+    private final UserClient userClient;
 
     //계좌 생성
     public CashAccountDto createAccount(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        UserIdDto user = userClient.getUserId(userId);
 
         CashAccount account = CashAccount.builder()
-                .user(user)
+                .userId(user.getUserId())
                 .balance(BigDecimal.ZERO)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
@@ -39,7 +36,9 @@ public class CashAccountService {
 
     //계좌 조회
     public List<CashAccountDto> getAccountsByUserId(Long userId) {
-        List<CashAccount> accounts = cashAccountRepository.findAllByUserId(userId);
+        UserIdDto user = userClient.getUserId(userId);
+
+        List<CashAccount> accounts = cashAccountRepository.findAllByUserId(user.getUserId());
         return accounts.stream().map(this::toDto).toList();
     }
 
@@ -47,7 +46,7 @@ public class CashAccountService {
     private CashAccountDto toDto(CashAccount account) {
         return CashAccountDto.builder()
                 .accountId(account.getAccountId())
-                .userId(account.getUser().getId())
+                .userId(account.getUserId())
                 .balance(account.getBalance())
                 .createdAt(account.getCreatedAt().toString())
                 .updatedAt(account.getUpdatedAt().toString())
