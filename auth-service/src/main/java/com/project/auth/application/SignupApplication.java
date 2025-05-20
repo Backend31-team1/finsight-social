@@ -49,7 +49,7 @@ public class SignupApplication {
     // 랜덤코드를 담은 전송할 검증용 링크 생성
     String verifyLink = UriComponentsBuilder
         .fromUriString(baseUrl)
-        .path("/signup/verify")
+        .path("auth/signup/verify")
         .queryParam("email", form.getEmail())
         .queryParam("code", code)
         .toUriString();

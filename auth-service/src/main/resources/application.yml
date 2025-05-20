@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB       # 원하는 최대 파일 크기
+      max-request-size: 10MB
   config:
     import: optional:classpath:application-secret.yml
 

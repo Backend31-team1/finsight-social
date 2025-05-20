@@ -27,12 +27,17 @@ public class SecurityConfig {
   private final RestAccessDeniedHandler deniedHandler;
 
   @Bean
+  public JwtAuthenticationFilter jwtAuthenticationFilter() {
+    return new JwtAuthenticationFilter(provider);
+  }
+
+  @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
     http
         // API이므로 세션 기반 CSRF 필요 없음
         .csrf(csrf -> csrf.disable())
@@ -65,10 +70,11 @@ public class SecurityConfig {
         )
         // JwtAuthenticationFilter 를 Spring Security 필터체인에 등록
         .addFilterBefore(
-            new JwtAuthenticationFilter(provider),
+            jwtAuthenticationFilter,
             UsernamePasswordAuthenticationFilter.class
         );
 
     return http.build();
   }
+
 }
