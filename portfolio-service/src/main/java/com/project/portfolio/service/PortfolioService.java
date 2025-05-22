@@ -1,0 +1,28 @@
+package com.project.portfolio.service;
+
+import com.project.portfolio.dto.PortfolioCreationDto;
+import com.project.portfolio.entity.Portfolio;
+import com.project.portfolio.repository.PortfolioRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+
+@Service
+@RequiredArgsConstructor
+public class PortfolioService {
+
+    private final PortfolioRepository portfolioRepository;
+
+    @Transactional
+    public void createPortfolio(Long userId, PortfolioCreationDto request) {
+        // 포트폴리오 생성
+        Portfolio portfolio = new Portfolio();
+        portfolio.setUserId(userId);
+        portfolio.setName(request.getName());
+        portfolio.setCreatedAt(LocalDateTime.now());
+
+        portfolioRepository.save(portfolio);
+    }
+}
