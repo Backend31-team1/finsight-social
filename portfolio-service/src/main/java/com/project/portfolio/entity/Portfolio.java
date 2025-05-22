@@ -5,7 +5,6 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "portfolio")
@@ -18,7 +17,7 @@ public class Portfolio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long PortfolioId;
+    private Long portfolioId;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
