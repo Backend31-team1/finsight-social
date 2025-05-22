@@ -15,6 +15,13 @@ spring:
       hibernate:
         format_sql: true
 
+  task:
+    scheduling:
+      pool:
+        size: 5
+      thread-name-prefix: "sched-"
+      timezone: Asia/Seoul
+
   cloud:
     openfeign:
       okhttp:
@@ -40,6 +47,10 @@ server:
 
 jwt:
   secret: ${jwt.secret}
+
+# Finnhub API 호출 기본 URL (키는 secret.yml)
+finnhub:
+  base-url: https://finnhub.io/api/v1
 
 logging:
   level:

@@ -32,6 +32,8 @@ dependencies {
     implementation project(":common")
 
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'io.github.openfeign:feign-slf4j:11.10'
+
 
     // Spring Cloud AWS S3 스타터 (v2 → AWS SDK v2 기반)
     implementation "io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.2"
