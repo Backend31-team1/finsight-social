@@ -1,9 +1,12 @@
 package com.project.order.controller;
 
 import com.project.order.dto.OrderRequest;
+import com.project.order.dto.OrderResponseDto;
 import com.project.order.entity.Order;
 import com.project.order.service.LimitOrderService;
 import com.project.order.service.MarketOrderService;
+import com.project.order.service.OrderQueryService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,7 @@ public class OrderController {
 
   private final MarketOrderService marketOrderService;
   private final LimitOrderService limitOrderService;
+  private final OrderQueryService orderQueryService;
 
   /**
    * 시장가 주문을 생성합니다.
@@ -43,5 +47,11 @@ public class OrderController {
   public ResponseEntity<Order> placeLimitOrder(@RequestBody OrderRequest request) {
     Order order = limitOrderService.placeLimitOrder(request);
     return ResponseEntity.ok(order);
+  }
+
+  @GetMapping
+  public ResponseEntity<List<OrderResponseDto>> getOrders(@RequestParam Long portfolioId) {
+    List<OrderResponseDto> orders = orderQueryService.getOrdersByPortfolioId(portfolioId);
+    return ResponseEntity.ok(orders);
   }
 }
