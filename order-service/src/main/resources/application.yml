@@ -1,8 +1,12 @@
 spring:
+  config:
+    import: optional:classpath:application-secret.yml
+
   datasource:
-    url: jdbc:postgresql://db:5432/finsight
+    url: jdbc:postgresql://localhost:5432/finsight
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -11,9 +15,31 @@ spring:
       hibernate:
         format_sql: true
 
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
+
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID}
+        secret-key: ${AWS_SECRET_ACCESS_KEY}
+      region:
+        static: ap-northeast-2
+      s3:
+        bucket: finsight-social-project
+        profile-folder: team-project/profiles
+
+app:
+  # 배포시에는 배포 IP로 할당되도록 변경
+  base-url: http://localhost:${server.port}
+
 # 공통 프로퍼티
 server:
   port: 8083
+
+jwt:
+  secret: ${jwt.secret}
 
 logging:
   level:

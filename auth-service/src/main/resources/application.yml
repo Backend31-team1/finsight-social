@@ -39,8 +39,8 @@ app:
 
 #admin 시더에 들어갈 값들
 admin:
-  email: ${ADMIN_EMAIL}
-  password: ${ADMIN_PW}
+  email: skygksmf5810@gmail.com
+  password: asdfasdf123
 
 mailgun:
   api:
