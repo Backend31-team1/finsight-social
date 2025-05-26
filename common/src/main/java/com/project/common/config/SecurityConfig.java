@@ -51,7 +51,13 @@ public class SecurityConfig {
         // 인가 설정 ,로그인·회원가입 엔드포인트는 모두 허용, 나머지 요청은 모두 토큰인증 필요.
         .authorizeHttpRequests(auth -> auth
             // 인증 없이 열어줄 경로
-            .requestMatchers(
+
+            // 실시간 시세 테스트용 html, WS 엔드포인트
+            .requestMatchers("/test-ws.html", "/ws/**").permitAll()
+            .requestMatchers("/app/**", "/queue/**").permitAll()
+            .requestMatchers("/api/metadata/**", "/api/quote/**").permitAll()
+
+              .requestMatchers(
                 "/auth/signin",
                 "/auth/signup",
                 "/auth/signup/verify",
