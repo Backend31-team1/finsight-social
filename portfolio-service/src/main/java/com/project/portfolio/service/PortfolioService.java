@@ -1,8 +1,11 @@
 package com.project.portfolio.service;
 
+import com.project.common.exception.CustomException;
+import com.project.common.exception.ErrorCode;
 import com.project.portfolio.dto.PortfolioCreationDto;
 import com.project.portfolio.dto.PortfolioResponseDto;
 import com.project.portfolio.entity.Portfolio;
+import com.project.portfolio.repository.PortfolioAssetRepository;
 import com.project.portfolio.repository.PortfolioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,7 @@ import java.util.List;
 public class PortfolioService {
 
     private final PortfolioRepository portfolioRepository;
+    private final PortfolioAssetRepository portfolioAssetRepository;
 
     @Transactional
     public void createPortfolio(Long userId, PortfolioCreationDto request) {
@@ -35,4 +39,18 @@ public class PortfolioService {
                 .map(p -> new PortfolioResponseDto(p.getPortfolioId(), p.getName()))
                 .toList();
     }
+
+    // 포트폴리오 삭제
+    @Transactional
+    public void deletePortfolio(Long userId, Long portfolioId) {
+        Portfolio portfolio = portfolioRepository.findByPortfolioIdAndUserId(portfolioId, userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_PORTFOLIO));
+
+        // 자식 삭제
+        portfolioAssetRepository.deleteByPortfolioId(portfolioId);
+
+        // 부모 삭제
+        portfolioRepository.delete(portfolio);
+    }
+
 }
