@@ -22,7 +22,8 @@ public class GetTransactionService {
                         tx.getAssetId(),
                         tx.getQuantity(),
                         tx.getTotalPrice(),
-                        tx.getTradeAt()
+                        tx.getTradeAt(),
+                        tx.getTransactionCountry()
                 ))
                 .toList();
     }

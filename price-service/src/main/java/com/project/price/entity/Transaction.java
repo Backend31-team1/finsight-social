@@ -1,5 +1,6 @@
 package com.project.price.entity;
 
+import com.project.common.type.Country;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,4 +23,5 @@ public class Transaction {
     private Integer quantity;
     private BigDecimal totalPrice;
     private LocalDateTime tradeAt;
+    private Country transactionCountry;
 }
