@@ -1,15 +1,55 @@
 spring:
+  config:
+    import: optional:classpath:application-secret.yml
+
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID}
+        secret-key: ${AWS_SECRET_ACCESS_KEY}
+      region:
+        static: ap-northeast-2
+      s3:
+        bucket: finsight-social-project
+        profile-folder: team-project/profiles
+
+
   datasource:
-    url: jdbc:postgresql://db:5432/finsight
+    url: jdbc:postgresql://localhost:5432/finsight
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
+        jdbc:
+          time_zone: UTC
         format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+app:
+  # 배포시에는 배포 IP로 할당되도록 변경
+  base-url: http://localhost:${server.port}
+
+#admin 시더에 들어갈 값들
+admin:
+  email: ${ADMIN_EMAIL}
+  password: ${ADMIN_PW}
+
+mailgun:
+  api:
+    base-url: ${mailgun.api.base-url}
+    domain: ${mailgun.api.domain}
+    key:    ${mailgun.api.key}
+
+jwt:
+  secret: ${jwt.secret}
 
 # 공통 프로퍼티
 server:

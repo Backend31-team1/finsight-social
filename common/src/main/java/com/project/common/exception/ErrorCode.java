@@ -19,7 +19,13 @@ public enum ErrorCode {
   LOGIN_CHECK_FAIL(HttpStatus.BAD_REQUEST, "아이디 또는 패스워드를 확인해 주세요"),
 
   //포트폴리오 관련 예외
-  NOT_FOUNT_PORTFOLIO(HttpStatus.BAD_REQUEST, "인증 제한시간을 초과하였습니다."),
+  NOT_FOUNT_PORTFOLIO(HttpStatus.BAD_REQUEST, "존재하지 않는 포트폴리오입니다.."),
+
+  //종목 관련 예외
+  NOT_FOUND_ASSET(HttpStatus.BAD_REQUEST, "존재하지 않는 종목입니다."),
+
+  //거래 관련 예외
+  NOT_FOUND_TRANSACTION(HttpStatus.BAD_REQUEST, "존재하지 않는 거래입니다."),
 
   //리프레쉬토큰 및 로그아웃 관련 예외
   INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST,"리프레쉬토큰 발급을 위한 토큰이 존재하지 않습니다."),
