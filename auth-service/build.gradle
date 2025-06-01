@@ -67,6 +67,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
+    // Elasticsearch
+    implementation 'co.elastic.clients:elasticsearch-java:8.15.5'
+
     //랜덤 코드 생성
     implementation 'org.apache.commons:commons-text:1.10.0'
 }
