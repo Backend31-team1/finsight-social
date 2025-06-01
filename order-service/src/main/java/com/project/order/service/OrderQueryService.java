@@ -32,7 +32,7 @@ public class OrderQueryService {
         .collect(Collectors.toList());
   }
 
-  private OrderResponseDto convertToDto(Order order) {
+  public OrderResponseDto convertToDto(Order order) {
     return OrderResponseDto.builder()
         .id(order.getId())
         .portfolioId(order.getPortfolioId())
