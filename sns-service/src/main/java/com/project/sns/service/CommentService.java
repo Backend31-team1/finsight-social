@@ -4,14 +4,20 @@ import com.project.sns.controller.NotificationSocketController;
 import com.project.sns.dto.CommentRequestDto;
 import com.project.sns.dto.CommentResponseDto;
 import com.project.sns.entity.Comment;
+import com.project.sns.entity.CommentLike;
 import com.project.sns.entity.Notification;
 import com.project.sns.enums.NotificationType;
+import com.project.sns.repository.CommentLikeRepository;
 import com.project.sns.repository.CommentRepository;
 import com.project.sns.repository.NotificationRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 댓글 관련 비즈니스 로직을 담당하는 서비스 클래스입니다.
@@ -23,6 +29,7 @@ public class CommentService {
   private final CommentRepository commentRepository;
   private final NotificationRepository notificationRepository;
   private final NotificationSocketController notificationSocketController;
+  private final CommentLikeRepository commentLikeRepository;
 
   /**
    * 댓글 또는 대댓글을 생성합니다.
@@ -80,6 +87,34 @@ public class CommentService {
           return dto;
         })
         .toList();
+  }
+
+  //댓글 좋아요 (토글)
+  @Transactional
+  public Map<String, Object> toggleCommentLike(Long commentId, Long userId) {
+    Optional<CommentLike> existingLike = commentLikeRepository.findByCommentIdAndUserId(commentId, userId);
+
+    boolean isLiked;
+    if (existingLike.isPresent()) {
+      // 좋아요 취소
+      commentLikeRepository.delete(existingLike.get());
+      isLiked = false;
+    } else {
+      // 좋아요 등록
+      CommentLike like = CommentLike.builder()
+              .commentId(commentId)
+              .userId(userId)
+              .build();
+      commentLikeRepository.save(like);
+      isLiked = true;
+    }
+
+    Long likeCount = commentLikeRepository.countByCommentId(commentId);
+
+    return Map.of(
+            "isLiked", isLiked,
+            "likeCount", likeCount
+    );
   }
 }
 
