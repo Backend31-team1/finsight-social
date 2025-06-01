@@ -1,5 +1,7 @@
 package com.project.sns.controller;
 
+import com.project.sns.dto.ChatRoomCreateRequest;
+import com.project.sns.dto.ChatRoomResponse;
 import com.project.sns.dto.ChatRoomSummaryResponse;
 import com.project.sns.dto.MessageResponse;
 import com.project.sns.service.ChatRoomService;
@@ -35,5 +37,12 @@ public class ChatRoomController {
     ) {
         Page<MessageResponse> messages = messageService.getMessagesByRoom(roomId, page, size);
         return ResponseEntity.ok(messages);
+    }
+
+    // 채팅방 생성 또는 조회
+    @PostMapping("/room")
+    public ResponseEntity<ChatRoomResponse> createOrGetRoom(@RequestBody ChatRoomCreateRequest request) {
+        ChatRoomResponse response = chatRoomService.createOrGetRoom(request);
+        return ResponseEntity.ok(response);
     }
 }
