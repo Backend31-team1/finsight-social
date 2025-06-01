@@ -63,7 +63,9 @@ public class SecurityConfig {
                 "/auth/signup/verify",
                 "/auth/refresh",
                 "/swagger-ui/**",
-                "/v3/api-docs/**"
+                "/v3/api-docs/**",
+                "/admin/**",
+                "/migrate/**"
             ).permitAll()
             // 로그아웃
             .requestMatchers("/auth/logout")

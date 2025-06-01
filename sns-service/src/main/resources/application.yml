@@ -30,6 +30,15 @@ spring:
         bucket: finsight-social-project
         profile-folder: team-project/profiles
 
+  elasticsearch:
+    repositories:
+      enabled: true
+    client:
+      reactive:
+        endpoints: localhost:9200
+    index:
+      auto-create: true
+
 app:
   # 배포시에는 배포 IP로 할당되도록 변경
   base-url: http://localhost:${server.port}

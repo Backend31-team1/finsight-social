@@ -60,6 +60,9 @@ dependencies {
     // @ControllerAdvice 기반 GlobalExceptionHandler를 위해 Spring Web 제공
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
+    // Elasticsearch
+    implementation 'co.elastic.clients:elasticsearch-java:8.15.5'
+
     // Test utilities
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
