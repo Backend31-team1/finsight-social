@@ -38,6 +38,12 @@ spring:
     properties:
       spring.json.add.type.headers: false
 
+   # 스케줄러 설정 추가
+  task:
+    scheduling:
+      pool:
+        size: 1
+
 app:
 
   # 배포시에는 배포 IP로 할당되도록 변경

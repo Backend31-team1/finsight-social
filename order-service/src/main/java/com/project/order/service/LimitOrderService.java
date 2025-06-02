@@ -12,7 +12,8 @@ import java.sql.Timestamp;
 import java.time.Instant;
 
 /**
- * 지정가 주문 처리 서비스
+ * 지정가 주문 저장을 처리하는 서비스입니다.
+ * 체결 조건 만족 시 추후 ExecutionService에서 체결 처리됩니다.
  */
 @Service
 @RequiredArgsConstructor
@@ -21,20 +22,19 @@ public class LimitOrderService {
   private final OrderRepository orderRepository;
 
   /**
-   * 지정가 주문을 생성합니다.
+   * 지정가 주문을 저장합니다. (PENDING 상태로 저장)
    *
-   * @param request - 주문 요청 DTO
+   * @param request - 지정가 주문 요청 DTO
    * @return 저장된 주문 객체
    */
   public Order placeLimitOrder(OrderRequest request) {
     Order order = Order.builder()
-        .assetId(request.getAssetId())
         .portfolioId(request.getPortfolioId())
-        .orderType(OrderType.LIMIT)
+        .assetId(request.getAssetId())
         .quantity(request.getQuantity())
         .targetPrice(request.getTargetPrice())
-        .status(OrderStatus.PENDING)
-        .ttl(request.getTtl())
+        .orderType(OrderType.LIMIT)
+        .status(OrderStatus.PENDING) // 체결은 추후 실행됨
         .createdAt(Timestamp.from(Instant.now()))
         .build();
 

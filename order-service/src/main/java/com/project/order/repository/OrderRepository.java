@@ -1,6 +1,8 @@
 package com.project.order.repository;
 
 import com.project.order.entity.Order;
+import com.project.order.entity.OrderStatus;
+import com.project.order.entity.OrderType;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -16,4 +18,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
    * @return 주문 리스트
    */
   List<Order> findByPortfolioId(Long portfolioId);
+
+  List<Order> findByOrderTypeAndStatus(OrderType orderType, OrderStatus status);
 }
