@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-  List<Comment> findByPostIdOrderByCreatedAtAsc(Long postId);
+
+  // 게시글 ID 기준으로 댓글 시간순 정렬
+  List<Comment> findByPost_PostIdOrderByCreatedAtAsc(Long postId);
 }

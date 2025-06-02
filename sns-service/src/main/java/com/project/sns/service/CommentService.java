@@ -1,17 +1,26 @@
 package com.project.sns.service;
 
+import com.project.sns.application.PostApplication;
 import com.project.sns.controller.NotificationSocketController;
 import com.project.sns.dto.CommentRequestDto;
 import com.project.sns.dto.CommentResponseDto;
 import com.project.sns.entity.Comment;
+import com.project.sns.entity.CommentLike;
 import com.project.sns.entity.Notification;
+import com.project.sns.entity.Post;
 import com.project.sns.enums.NotificationType;
+import com.project.sns.repository.CommentLikeRepository;
 import com.project.sns.repository.CommentRepository;
 import com.project.sns.repository.NotificationRepository;
+import com.project.sns.repository.PostRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 댓글 관련 비즈니스 로직을 담당하는 서비스 클래스입니다.
@@ -23,6 +32,10 @@ public class CommentService {
   private final CommentRepository commentRepository;
   private final NotificationRepository notificationRepository;
   private final NotificationSocketController notificationSocketController;
+  private final CommentLikeRepository commentLikeRepository;
+  private final PostApplication postApplication;
+  private final PostRepository postRepository;
+
 
   /**
    * 댓글 또는 대댓글을 생성합니다.
@@ -45,6 +58,8 @@ public class CommentService {
 
     // 댓글 저장
     commentRepository.save(comment);
+    // 댓글 점수 갱신(인기게시글)
+    postApplication.recordComment(postId);
 
     // WebSocket 실시간 알림 전송
     Long postWriterId = 2L; // TODO: 실제 게시글 작성자의 ID로 변경 필요
@@ -72,7 +87,7 @@ public class CommentService {
    * @return 댓글 응답 리스트
    */
   public List<CommentResponseDto> getComments(Long postId) {
-    return commentRepository.findByPostIdOrderByCreatedAtAsc(postId)
+    return commentRepository.findByPost_PostIdOrderByCreatedAtAsc(postId)
         .stream()
         .map(comment -> {
           CommentResponseDto dto = new CommentResponseDto();
@@ -83,6 +98,38 @@ public class CommentService {
           return dto;
         })
         .toList();
+  }
+
+  //댓글 좋아요 (토글)
+  @Transactional
+  public Map<String, Object> toggleCommentLike(Long commentId, Long userId) {
+    Optional<CommentLike> existingLike = commentLikeRepository.findByComment_CommentIdAndUserId(commentId, userId);
+
+    boolean isLiked;
+    if (existingLike.isPresent()) {
+      // 좋아요 취소
+      commentLikeRepository.delete(existingLike.get());
+      isLiked = false;
+    } else {
+      // Comment 객체 조회
+      Comment comment = commentRepository.findById(commentId)
+          .orElseThrow(() -> new IllegalArgumentException("❌ 댓글이 존재하지 않습니다."));
+
+      // 좋아요 등록
+      CommentLike like = CommentLike.builder()
+              .comment(comment)
+              .userId(userId)
+              .build();
+      commentLikeRepository.save(like);
+      isLiked = true;
+    }
+
+    Long likeCount = commentLikeRepository.countByComment_CommentId(commentId);
+
+    return Map.of(
+            "isLiked", isLiked,
+            "likeCount", likeCount
+    );
   }
 
   /**
@@ -108,7 +155,7 @@ public class CommentService {
     commentRepository.delete(comment);
 
     // 인기 게시글 점수 반영 요청 (PostService 호출)
-    Long postId = comment.getPost().getId();
+    Long postId = comment.getPost().getPostId();
     postApplication.recordCommentRemoval(postId);
     // 위 부분은 제가 임시로 넣어놓았습니다 post부분(게시글 create) 개발 후 맞춰서 수정 부탁드립니다
   }
