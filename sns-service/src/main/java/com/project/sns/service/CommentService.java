@@ -1,5 +1,6 @@
 package com.project.sns.service;
 
+import com.project.sns.application.PostApplication;
 import com.project.sns.controller.NotificationSocketController;
 import com.project.sns.dto.CommentRequestDto;
 import com.project.sns.dto.CommentResponseDto;
@@ -30,6 +31,8 @@ public class CommentService {
   private final NotificationRepository notificationRepository;
   private final NotificationSocketController notificationSocketController;
   private final CommentLikeRepository commentLikeRepository;
+  private final PostApplication postApplication;
+
 
   /**
    * 댓글 또는 대댓글을 생성합니다.
@@ -49,6 +52,8 @@ public class CommentService {
 
     // 댓글 저장
     commentRepository.save(comment);
+    // 댓글 점수 갱신(인기게시글)
+    postApplication.recordComment(postId);
 
     // WebSocket 실시간 알림 전송
     Long postWriterId = 2L; // TODO: 실제 게시글 작성자의 ID로 변경 필요
