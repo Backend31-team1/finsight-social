@@ -19,8 +19,22 @@ bootJar {
 jar {
     enabled = true
 }
+ext {
+    set('springCloudVersion', "2024.0.1")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+
+    }
+}
 
 dependencies {
+
+    // Feign 라이브러리
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
@@ -31,6 +45,12 @@ dependencies {
     // 공통 유틸 및 Bean 관리용 Spring Core
     implementation 'org.springframework:spring-context'
 
+    // jwt 토큰 및 security 관련 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
     // 공통 DTO 직렬화/역직렬화용 Jackson
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 
@@ -39,6 +59,9 @@ dependencies {
 
     // @ControllerAdvice 기반 GlobalExceptionHandler를 위해 Spring Web 제공
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Elasticsearch
+    implementation 'co.elastic.clients:elasticsearch-java:8.15.5'
 
     // Test utilities
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

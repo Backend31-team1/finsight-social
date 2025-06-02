@@ -1,8 +1,12 @@
 spring:
+  config:
+    import: optional:classpath:application-secret.yml
+
   datasource:
-    url: jdbc:postgresql://db:5432/finsight
+    url: jdbc:postgresql://localhost:5432/finsight
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -10,10 +14,46 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  # WebSocket 세부 설정
+  websocket:
+    allowed-origins: "*"
+
+  task:
+    scheduling:
+      pool:
+        size: 5
+      thread-name-prefix: "sched-"
+      timezone: Asia/Seoul
+
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
+
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID}
+        secret-key: ${AWS_SECRET_ACCESS_KEY}
+      region:
+        static: ap-northeast-2
+      s3:
+        bucket: finsight-social-project
+        profile-folder: team-project/profiles
+
+app:
+  # 배포시에는 배포 IP로 할당되도록 변경
+  base-url: http://localhost:${server.port}
 
 # 공통 프로퍼티
 server:
   port: 8085
+
+jwt:
+  secret: ${jwt.secret}
+
+# Finnhub API 호출 기본 URL (키는 secret.yml)
+finnhub:
+  base-url: https://finnhub.io/api/v1
 
 logging:
   level:

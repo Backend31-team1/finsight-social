@@ -30,6 +30,16 @@ dependencyManagement {
 dependencies {
 
     implementation project(":common")
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'io.github.openfeign:feign-slf4j:11.10'
+
+
+    // Spring Cloud AWS S3 스타터 (v2 → AWS SDK v2 기반)
+    implementation "io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.2"
+    // AWS SDK v2 S3 모듈
+    implementation "software.amazon.awssdk:s3:2.21.20"
+
     // REST API
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -42,11 +52,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'org.postgresql:postgresql'
 
-    // HTML 파싱 (웹 스크래핑용도로 생각중임 변경할수도?)
-    implementation 'org.jsoup:jsoup:1.16.1'
+    //Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5'
 
     // WebSocket (실시간 시세 푸시)
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    // JSON 바인딩 강화
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.30'
