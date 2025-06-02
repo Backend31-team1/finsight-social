@@ -3,6 +3,15 @@ spring:
     url: jdbc:postgresql://db:5432/finsight
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: notification-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,6 +23,10 @@ spring:
 # 공통 프로퍼티
 server:
   port: 8082
+
+# WebSocket 설정 (선택적으로 클라이언트 제한 가능)
+websocket:
+  allowed-origins: "*"
 
 logging:
   level:
