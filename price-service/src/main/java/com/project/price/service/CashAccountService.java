@@ -1,6 +1,6 @@
 package com.project.price.service;
 
-import com.project.common.dto.UserIdDto;
+import com.project.common.dto.UserSummaryDto;
 import com.project.price.client.UserClient;
 import com.project.price.dto.CashAccountDto;
 import com.project.price.entity.CashAccount;
@@ -21,7 +21,7 @@ public class CashAccountService {
 
     //계좌 생성
     public CashAccountDto createAccount(Long userId) {
-        UserIdDto user = userClient.getUserId(userId);
+        UserSummaryDto user = userClient.getUserSummary(userId);
 
         CashAccount account = CashAccount.builder()
                 .userId(user.getUserId())
@@ -36,7 +36,7 @@ public class CashAccountService {
 
     //계좌 조회
     public List<CashAccountDto> getAccountsByUserId(Long userId) {
-        UserIdDto user = userClient.getUserId(userId);
+        UserSummaryDto user = userClient.getUserSummary(userId);
 
         List<CashAccount> accounts = cashAccountRepository.findAllByUserId(user.getUserId());
         return accounts.stream().map(this::toDto).toList();

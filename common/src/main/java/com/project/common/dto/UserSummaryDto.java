@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserIdDto {
+public class UserSummaryDto {
     private Long userId;
+    private String nickname;
 }

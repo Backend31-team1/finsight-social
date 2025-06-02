@@ -1,13 +1,16 @@
 package com.project.sns.controller;
 
+import com.project.common.UserVo;
 import com.project.sns.dto.CommentRequestDto;
 import com.project.sns.dto.CommentResponseDto;
 import com.project.sns.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 댓글 API 요청을 처리하는 컨트롤러 클래스입니다.
@@ -43,5 +46,15 @@ public class CommentController {
   @GetMapping
   public ResponseEntity<List<CommentResponseDto>> getComments(@PathVariable Long postId) {
     return ResponseEntity.ok(commentService.getComments(postId));
+  }
+
+  @PostMapping("/{commentId}/like")
+  public ResponseEntity<Map<String, Object>> toggleCommentLike(
+          @PathVariable Long commentId,
+          @AuthenticationPrincipal UserVo user
+  ) {
+    Long userId = user.getId();
+    Map<String, Object> result = commentService.toggleCommentLike(commentId, userId);
+    return ResponseEntity.ok(result);
   }
 }

@@ -1,7 +1,7 @@
 package com.project.price.client;
 
 import com.project.common.config.FeignClientConfiguration;
-import com.project.common.dto.UserIdDto;
+import com.project.common.dto.UserSummaryDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,5 +14,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface UserClient {
 
     @GetMapping("/auth/users/{userId}")
-    UserIdDto getUserId(@PathVariable("userId") Long userId);
+    UserSummaryDto getUserSummary(@PathVariable("userId") Long userId);
 }

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    pre#log {
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      padding: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-family: monospace;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+</head>
+<body>
+<h3>WebSocket Test</h3>
+<pre id="log"></pre>
+<script>
+  const log = txt => document.getElementById('log').innerText += txt + '\n';
+
+  // 1. SockJS로 연결
+  const sock = new SockJS('/ws/quotes');
+  const client = Stomp.over(sock);
+
+  client.connect({}, frame => {
+    log('Connected: ' + frame);
+
+    // 2. 구독: 서버 푸시 받을 채널
+    client.subscribe('/user/queue/quotes', msg => {
+      log('Push: ' + msg.body);
+    });
+
+    // 3. 구독 요청: 서버에 내 심볼을 알려줌
+    client.send('/app/subscribe', {}, JSON.stringify({ symbol: 'AAPL' }));
+    log('Sent subscribe for AAPL');
+  });
+</script>
+</body>
+</html>

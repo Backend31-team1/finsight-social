@@ -73,6 +73,9 @@ public class User {
 
   private LocalDateTime verifyExpiredAt;
 
+  @Column(name = "profile_photo_key", length = 256)
+  private String profilePhotoKey;
+
   @Column(name = "profile_photo_url")
   private String profilePhotoUrl;
 
