@@ -20,13 +20,15 @@ public enum ErrorCode {
 
   //리프레쉬토큰 및 로그아웃 관련 예외
   INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST,"리프레쉬토큰 발급을 위한 토큰이 존재하지 않습니다."),
-  REFRESH_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "리프레쉬토큰이 만료되었습니다.");
-  private final HttpStatus httpStatus;
-  private final String detail;
+  REFRESH_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "리프레쉬토큰이 만료되었습니다."),
 
   // 주문 관련 예외
   INVALID_QUANTITY(HttpStatus.BAD_REQUEST, "수량은 1 이상이어야 합니다."),
   INVALID_PRICE(HttpStatus.BAD_REQUEST, "가격은 0보다 커야 합니다."),
-  INVALID_ORDER_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 주문 유형입니다."),
+  INVALID_ORDER_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 주문 유형입니다.");
+
+  private final HttpStatus httpStatus;
+  private final String detail;
+
 }
 
