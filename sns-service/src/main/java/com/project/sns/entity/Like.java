@@ -11,11 +11,13 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Table(name = "likes")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Like {
     @Id
+    @Column(name = "like_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likeId;
 
