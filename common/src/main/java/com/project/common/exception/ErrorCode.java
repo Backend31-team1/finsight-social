@@ -33,15 +33,13 @@ public enum ErrorCode {
   NOT_FOUND_CHATROOM(HttpStatus.BAD_REQUEST, "존재하지 않는 채팅방입니다."),
 
   //리프레쉬토큰 및 로그아웃 관련 예외
-  INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST,"리프레쉬토큰 발급을 위한 토큰이 존재하지 않습니다."),
+  INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "리프레쉬토큰 발급을 위한 토큰이 존재하지 않습니다."),
   REFRESH_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "리프레쉬토큰이 만료되었습니다."),
 
   // 권한 관련 예외
   FORBIDDEN(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
   UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "인증되지 않은 접근입니다."),
 
-  // 게시글 관련 예외
-  NOT_FOUND_POST(HttpStatus.BAD_REQUEST, "존재하지 않는 게시글입니다."),
 
   // 댓글 관련 예외
   NOT_FOUND_COMMENT(HttpStatus.BAD_REQUEST, "존재하지 않는 댓글입니다."),
@@ -67,7 +65,10 @@ public enum ErrorCode {
   // 파일 업로드 관련 예외
   FILE_TOO_LARGE(HttpStatus.BAD_REQUEST, "파일 크기가 너무 큽니다."),
   INVALID_FILE_TYPE(HttpStatus.BAD_REQUEST, "지원하지 않는 파일 형식입니다."),
-  FILE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
+  FILE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다."),
+  
+  S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3 파일업로드에 실패했습니다.");
+
 
   private final HttpStatus httpStatus;
   private final String detail;
