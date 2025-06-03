@@ -9,6 +9,7 @@ import com.project.sns.repository.PostStatsRepository;
 import com.project.sns.service.PostService;
 import com.project.common.exception.CustomException;
 import com.project.common.exception.ErrorCode;
+import com.project.sns.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
@@ -27,6 +28,7 @@ public class PostApplication implements PostService {
   private final PostRepository postRepository;
   private final PostStatsRepository postStatsRepository;
   private final StringRedisTemplate redisTemplate;
+  private final S3Service s3Service;
 
   @Value("${app.redis.trending-key:post:views}")
   private String REDIS_TRENDING_KEY;
@@ -49,6 +51,13 @@ public class PostApplication implements PostService {
   @Override
   @Transactional
   public PostResponse createPost(PostRequest request) {
+
+    // 이미지 파일이 있으면 S3에 업로드 -> URL set
+    if (request.getImageFile() != null && !request.getImageFile().isEmpty()) {
+      String url = s3Service.uploadFile(request.getImageFile());
+      request.setPostImageUrl(url);
+    }
+
     Post post = Post.builder()
         .userId(request.getUserId())
         .title(request.getTitle())
@@ -115,6 +124,15 @@ public class PostApplication implements PostService {
   public PostResponse updatePost(Long postId, PostRequest request) {
     Post post = postRepository.findById(postId)
         .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
+    if (!post.getUserId().equals(request.getUserId())) {
+      throw new CustomException(ErrorCode.FORBIDDEN);
+    }
+
+    // S3
+    if (request.getImageFile() != null && !request.getImageFile().isEmpty()) {
+      String url = s3Service.uploadFile(request.getImageFile());
+      request.setPostImageUrl(url);
+    }
 
     post.update(request.getTitle(), request.getContent(), request.getPostImageUrl());
     postRepository.save(post);
@@ -140,8 +158,11 @@ public class PostApplication implements PostService {
 
     //작성자 일치 검증
     if (!post.getUserId().equals(userId)) {
-      throw new CustomException(ErrorCode.FORBIDDEN);  // ErrorCode에 FORBIDDEN 추가 필요
+      throw new CustomException(ErrorCode.FORBIDDEN);
     }
+    // S3에 저장된 이미지 삭제 하는 코드
+    String imageUrl = post.getPostImageUrl();
+    s3Service.deleteFile(imageUrl);
 
     //Cascade 설정 으로 연관된 댓글,좋아요,PostStats 모두 삭제됨
     postRepository.delete(post);
@@ -222,7 +243,7 @@ public class PostApplication implements PostService {
     if (stats == null) {
       throw new CustomException(ErrorCode.NOT_FOUND_POST);
     }
-    // commentCount를 1 줄이되, 음수로 떨어지지 않게
+    // commentCount를 1 줄이지만 음수로 떨어지지 않게 구현
     int newCommentCount = Math.max(stats.getCommentCount() - 1, 0);
     stats.setCommentCount(newCommentCount);
     postStatsRepository.save(stats);
