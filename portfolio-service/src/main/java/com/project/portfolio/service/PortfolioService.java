@@ -3,8 +3,10 @@ package com.project.portfolio.service;
 import com.project.common.exception.CustomException;
 import com.project.common.exception.ErrorCode;
 import com.project.portfolio.dto.PortfolioCreationDto;
+import com.project.portfolio.dto.PortfolioDetailResponseDto;
 import com.project.portfolio.dto.PortfolioResponseDto;
 import com.project.portfolio.entity.Portfolio;
+import com.project.portfolio.entity.PortfolioAsset;
 import com.project.portfolio.repository.PortfolioAssetRepository;
 import com.project.portfolio.repository.PortfolioRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,4 +55,20 @@ public class PortfolioService {
         portfolioRepository.delete(portfolio);
     }
 
+    // 포트폴리오 상세 조회
+    @Transactional(readOnly = true)
+    public PortfolioDetailResponseDto getPortfolioDetail(Long userId, Long portfolioId) {
+        Portfolio portfolio = portfolioRepository.findByPortfolioIdAndUserId(portfolioId, userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_PORTFOLIO));
+
+        List<Long> assetIds = portfolioAssetRepository.findByPortfolioId(portfolioId).stream()
+                .map(PortfolioAsset::getPortfolioAssetId)
+                .toList();
+
+        return PortfolioDetailResponseDto.builder()
+                .portfolioId(portfolio.getPortfolioId())
+                .name(portfolio.getName())
+                .assetIds(assetIds)
+                .build();
+    }
 }
