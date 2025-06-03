@@ -34,6 +34,13 @@ public enum ErrorCode {
   INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST,"리프레쉬토큰 발급을 위한 토큰이 존재하지 않습니다."),
   REFRESH_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "리프레쉬토큰이 만료되었습니다."),
 
+  // 권한 관련 예외
+  FORBIDDEN(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
+  UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "인증되지 않은 접근입니다."),
+
+  // 게시글 관련 예외
+  NOT_FOUND_POST(HttpStatus.BAD_REQUEST, "존재하지 않는 게시글입니다."),
+
   // 주문 관련 예외
   INVALID_QUANTITY(HttpStatus.BAD_REQUEST, "수량은 1 이상이어야 합니다."),
   INVALID_PRICE(HttpStatus.BAD_REQUEST, "가격은 0보다 커야 합니다."),
