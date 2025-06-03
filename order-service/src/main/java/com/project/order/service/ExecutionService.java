@@ -11,13 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.Instant;
 
 /**
- * 주문 체결 처리 및 체결 후 후속 작업을 담당하는 서비스입니다.
- * - 현금/자산 처리
- * - 거래 내역 저장
- * - Kafka 이벤트 발행
+ * 주문 체결 처리 및 후속 작업을 담당하는 서비스입니다.
  */
 @Service
 @RequiredArgsConstructor
@@ -28,23 +26,37 @@ public class ExecutionService {
   private final TransactionService transactionService;
 
   /**
-   * 주문 체결 처리 메서드입니다.
+   * 주문 체결 처리를 수행합니다.
    * 체결 완료 시 거래 내역을 저장하고 Kafka 이벤트를 발행합니다.
+   * 매도 거래인 경우 ProfitItem도 함께 생성됩니다.
    *
-   * @param order - 체결된 주문 객체
+   * @param order 체결할 주문 객체
    */
   @Transactional
   public void processExecution(Order order) {
+    // 주문 상태 업데이트
+    order.setStatus(OrderStatus.FILLED);
+    order.setExecutedAt(Timestamp.from(Instant.now()));
+    orderRepository.save(order);
 
-    order.setStatus(OrderStatus.FILLED); // 주문 상태 업데이트
-    orderRepository.save(order);         // DB 반영
+    // 거래 내역 저장 (매도인 경우 ProfitItem도 함께 생성)
+    transactionService.saveTransaction(order);
 
-    transactionService.saveTransaction(order); // 거래 내역 저장
+    // 포트폴리오 업데이트 이벤트 발행
+    publishPortfolioUpdateEvents(order);
 
+    // 주문 체결 알림 이벤트 발행
+    publishOrderFilledEvent(order);
+  }
+
+  /**
+   * 포트폴리오 자산/현금 업데이트 이벤트를 발행합니다.
+   */
+  private void publishPortfolioUpdateEvents(Order order) {
     BigDecimal totalAmount = order.getTargetPrice().multiply(BigDecimal.valueOf(order.getQuantity()));
 
-    if (order.getOrderType().isBuy()) {
-      // 💸 매수: 현금 차감, 자산 증가
+    if (order.getIsBuy()) {
+      // 매수: 현금 차감, 자산 증가
       kafkaProducerService.sendPortfolioUpdateEvent(
           PortfolioUpdateEvent.builder()
               .portfolioId(order.getPortfolioId())
@@ -53,7 +65,6 @@ public class ExecutionService {
               .build()
       );
 
-      // 포트폴리오 반영 메시지 발행
       kafkaProducerService.sendPortfolioUpdateEvent(
           PortfolioUpdateEvent.builder()
               .portfolioId(order.getPortfolioId())
@@ -62,9 +73,8 @@ public class ExecutionService {
               .action(PortfolioUpdateEvent.ActionType.INCREASE_ASSET)
               .build()
       );
-
     } else {
-      // 💰 매도: 현금 증가, 자산 감소
+      // 매도: 현금 증가, 자산 감소
       kafkaProducerService.sendPortfolioUpdateEvent(
           PortfolioUpdateEvent.builder()
               .portfolioId(order.getPortfolioId())
@@ -82,8 +92,12 @@ public class ExecutionService {
               .build()
       );
     }
+  }
 
-    // Kafka로 체결 이벤트 발행
+  /**
+   * 주문 체결 알림 이벤트를 발행합니다.
+   */
+  private void publishOrderFilledEvent(Order order) {
     kafkaProducerService.sendOrderFilledEvent(
         OrderFilledEvent.builder()
             .orderId(order.getId())
