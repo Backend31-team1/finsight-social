@@ -24,4 +24,15 @@ public class IndexAdminController {
             return ResponseEntity.status(500).body("users 인덱스 생성 실패: " + e.getMessage());
         }
     }
+
+    // Elasticsearch 게시글 인덱싱
+    @PostMapping("/create-posts-index")
+    public ResponseEntity<String> createPostsIndex() {
+        try {
+            indexAdminService.createPostsIndex();
+            return ResponseEntity.ok("posts 인덱스 생성 성공!");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("posts 인덱스 생성 실패: " + e.getMessage());
+        }
+    }
 }

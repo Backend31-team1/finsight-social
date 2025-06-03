@@ -1,5 +1,6 @@
 package com.project.sns.controller;
 
+import com.project.common.elasticsearch.PostDocument;
 import com.project.common.elasticsearch.UserDocument;
 import com.project.sns.service.SearchService;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +23,11 @@ public class SearchController {
     @GetMapping("/user")
     public List<UserDocument> searchUsers(@RequestParam("keyword") String keyword) throws IOException {
         return searchService.searchUsers(keyword);
+    }
+
+    // 게시글 검색어 입력
+    @GetMapping("/post")
+    public List<PostDocument> searchPosts(@RequestParam("keyword") String keyword) throws IOException {
+        return searchService.searchPosts(keyword);
     }
 }
