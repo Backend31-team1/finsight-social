@@ -4,6 +4,7 @@ import com.project.sns.dto.NotificationResponseDto;
 import com.project.sns.entity.Notification;
 import com.project.sns.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

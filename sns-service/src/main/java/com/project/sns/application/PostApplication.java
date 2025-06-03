@@ -315,6 +315,48 @@ public class PostApplication implements PostService {
         .underCommentCount(stats.getUnderCommentCount())
         .build();
   }
+
+  // PostApplication.java의 대댓글 관련 메서드들만 추가
+
+  /**
+   * 대댓글 발생 시 호출하는 메서드
+   *
+   * underCommentCount를 증가시키고 인기게시물 점수를 재계산합니다.
+   */
+  @Transactional
+  public void recordUnderComment(Long postId) {
+    PostStats stats = postStatsRepository.findByPostPostId(postId);
+    if (stats == null) {
+      throw new CustomException(ErrorCode.NOT_FOUND_POST);
+    }
+    stats.incrementUnderComment();
+    postStatsRepository.save(stats);
+
+    double newScore = calculateScore(stats);
+    redisTemplate.opsForZSet()
+        .add(REDIS_TRENDING_KEY, postId.toString(), newScore);
+  }
+
+  /**
+   * 대댓글 삭제 시 호출하는 메서드
+   *
+   * underCommentCount를 감소시키고 인기게시물 점수를 재계산합니다.
+   */
+  @Transactional
+  public void recordUnderCommentRemoval(Long postId) {
+    PostStats stats = postStatsRepository.findByPostPostId(postId);
+    if (stats == null) {
+      throw new CustomException(ErrorCode.NOT_FOUND_POST);
+    }
+    // underCommentCount를 1 줄이되, 음수로 떨어지지 않게
+    int newUnderCommentCount = Math.max(stats.getUnderCommentCount() - 1, 0);
+    stats.setUnderCommentCount(newUnderCommentCount);
+    postStatsRepository.save(stats);
+
+    double newScore = calculateScore(stats);
+    redisTemplate.opsForZSet()
+        .add(REDIS_TRENDING_KEY, postId.toString(), newScore);
+  }
 }
 
 
