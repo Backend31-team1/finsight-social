@@ -27,8 +27,8 @@ spring:
       region:
         static: ap-northeast-2
       s3:
-        bucket: finsight-social-project
-        profile-folder: team-project/profiles
+        bucket: finsight-post-images  #게시물 사진 업로드 버킷
+        base-url: https://finsight-post-images.s3.ap-northeast-2.amazonaws.com
 
   elasticsearch:
     repositories:
