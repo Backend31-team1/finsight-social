@@ -30,7 +30,22 @@ spring:
         bucket: finsight-social-project
         profile-folder: team-project/profiles
 
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    properties:
+      spring.json.add.type.headers: false
+
+   # 스케줄러 설정 추가
+  task:
+    scheduling:
+      pool:
+        size: 1
+
 app:
+
   # 배포시에는 배포 IP로 할당되도록 변경
   base-url: http://localhost:${server.port}
 
