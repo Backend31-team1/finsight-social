@@ -2,6 +2,7 @@ package com.project.portfolio.controller;
 
 import com.project.common.UserVo;
 import com.project.portfolio.dto.PortfolioCreationDto;
+import com.project.portfolio.dto.PortfolioDetailResponseDto;
 import com.project.portfolio.dto.PortfolioResponseDto;
 import com.project.portfolio.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
@@ -45,5 +46,15 @@ public class PortfolioController {
     ) {
         portfolioService.deletePortfolio(user.getId(), portfolioId);
         return ResponseEntity.ok().build();
+    }
+
+    // 포트폴리오 상세 조회
+    @GetMapping("/{portfolioId}")
+    public ResponseEntity<PortfolioDetailResponseDto> getPortfolioDetail(
+            @AuthenticationPrincipal UserVo user,
+            @PathVariable Long portfolioId
+    ) {
+        PortfolioDetailResponseDto result = portfolioService.getPortfolioDetail(user.getId(), portfolioId);
+        return ResponseEntity.ok(result);
     }
 }
