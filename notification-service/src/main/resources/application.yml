@@ -1,16 +1,11 @@
 spring:
+  config:
+    import: optional:classpath:application-secret.yml
+
   datasource:
-    url: jdbc:postgresql://db:5432/finsight
+    url: jdbc:postgresql://localhost:5432/finsight
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-
-  kafka:
-    bootstrap-servers: localhost:9092
-    consumer:
-      group-id: notification-group
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
   jpa:
     hibernate:
@@ -20,9 +15,45 @@ spring:
       hibernate:
         format_sql: true
 
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
+
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID}
+        secret-key: ${AWS_SECRET_ACCESS_KEY}
+      region:
+        static: ap-northeast-2
+      s3:
+        bucket: finsight-social-project
+        profile-folder: team-project/profiles
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: notification-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    properties:
+      spring.json.trusted.packages: "*"
+      spring.json.use.type.headers: false
+      spring.json.value.default.type: com.project.notification.dto.OrderFilledEvent
+    listener:
+      missing-topics-fatal: false
+
+app:
+  # 배포시에는 배포 IP로 할당되도록 변경
+  base-url: http://localhost:${server.port}
+
 # 공통 프로퍼티
 server:
   port: 8082
+
+jwt:
+  secret: ${jwt.secret}
 
 # WebSocket 설정 (선택적으로 클라이언트 제한 가능)
 websocket:

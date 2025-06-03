@@ -45,7 +45,6 @@ spring:
         size: 1
 
 app:
-
   # 배포시에는 배포 IP로 할당되도록 변경
   base-url: http://localhost:${server.port}
 

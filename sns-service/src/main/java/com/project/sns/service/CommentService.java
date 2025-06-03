@@ -37,7 +37,6 @@ public class CommentService {
   private final PostApplication postApplication;
   private final PostRepository postRepository;
 
-  private final NotificationSocketController notificationSocketController;
 
   /**
    * 댓글 또는 대댓글을 생성합니다.
@@ -62,13 +61,6 @@ public class CommentService {
     commentRepository.save(comment);
     // 댓글 점수 갱신(인기게시글)
     postApplication.recordComment(postId);
-
-    // WebSocket 실시간 알림 전송
-    Long postWriterId = 2L; // TODO: 실제 게시글 작성자의 ID로 변경 필요
-    notificationSocketController.sendNotification(
-        postWriterId,
-        "회원님의 게시글에 댓글이 달렸습니다."
-    );
 
     // WebSocket 실시간 알림 전송
     Long postWriterId = 2L; // TODO: 실제 게시글 작성자의 ID로 변경 필요
