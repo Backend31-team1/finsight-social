@@ -44,7 +44,7 @@ public class PortfolioService {
     @Transactional
     public void deletePortfolio(Long userId, Long portfolioId) {
         Portfolio portfolio = portfolioRepository.findByPortfolioIdAndUserId(portfolioId, userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_PORTFOLIO));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PORTFOLIO));
 
         // 자식 삭제
         portfolioAssetRepository.deleteByPortfolioId(portfolioId);
