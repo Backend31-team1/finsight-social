@@ -12,11 +12,13 @@ import lombok.*;
 @Builder
 public class PortfolioAsset {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long portfolioAssetId;
 
-    private Long assetId;
+    @Column(length = 20, nullable = false)
+    private String symbol;
 
-    @ManyToOne
-    @JoinColumn(name = "portfolio_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "portfolio_id", nullable = false)
     private Portfolio portfolio;
 }

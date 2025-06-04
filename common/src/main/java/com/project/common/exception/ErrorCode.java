@@ -19,7 +19,7 @@ public enum ErrorCode {
   LOGIN_CHECK_FAIL(HttpStatus.BAD_REQUEST, "아이디 또는 패스워드를 확인해 주세요"),
 
   //포트폴리오 관련 예외
-  NOT_FOUNT_PORTFOLIO(HttpStatus.BAD_REQUEST, "존재하지 않는 포트폴리오입니다.."),
+  NOT_FOUND_PORTFOLIO(HttpStatus.BAD_REQUEST, "존재하지 않는 포트폴리오입니다.."),
 
   //종목 관련 예외
   NOT_FOUND_ASSET(HttpStatus.BAD_REQUEST, "존재하지 않는 종목입니다."),

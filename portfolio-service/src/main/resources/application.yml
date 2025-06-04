@@ -45,3 +45,6 @@ logging:
   level:
     root: INFO
     org.springframework.web: DEBUG
+
+price-service:
+  url: http://localhost:8085

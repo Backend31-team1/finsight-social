@@ -1,6 +1,5 @@
 package com.project.price.service;
 
-
 import com.project.price.client.FinnhubClient;
 import com.project.price.dto.CompanyProfileDto;
 import com.project.price.entity.AssetMetadata;
