@@ -29,6 +29,13 @@ public class PortfolioAssetService {
     Portfolio portfolio = portfolioRepository
         .findByPortfolioIdAndUserId(portfolioId, userId)
         .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PORTFOLIO));
+    // 심볼 중복시 예외
+    boolean alreadyExists = portfolioAssetRepository
+        .existsByPortfolio_PortfolioIdAndSymbol(portfolioId, symbol);
+    if (alreadyExists) {
+      throw new CustomException(ErrorCode.ASSET_ALREADY_EXIST);
+    }
+
 
     assetMetadataClient.getOrFetch(symbol); // price모듈에 요청 날림
 

@@ -4,7 +4,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "portfolio_asset")
+@Table(
+    name = "portfolio_asset",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uq_portfolio_symbol", columnNames = {"portfolio_id", "symbol"})
+    }
+)
 @Getter
 @Setter
 @NoArgsConstructor

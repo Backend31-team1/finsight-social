@@ -43,7 +43,7 @@ public class Post {
   private LocalDateTime updatedAt;
 
   @Column(name = "views", nullable = false, columnDefinition = "integer default 0")
-  private Integer views;
+  private int views;
 
   @Column(name = "post_image_url")
   private String postImageUrl;

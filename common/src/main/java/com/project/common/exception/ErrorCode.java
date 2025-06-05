@@ -20,6 +20,8 @@ public enum ErrorCode {
 
   //포트폴리오 관련 예외
   NOT_FOUND_PORTFOLIO(HttpStatus.BAD_REQUEST, "존재하지 않는 포트폴리오입니다.."),
+  ASSET_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 추가된 종목입니다."),
+
 
   //종목 관련 예외
   NOT_FOUND_ASSET(HttpStatus.BAD_REQUEST, "존재하지 않는 종목입니다."),

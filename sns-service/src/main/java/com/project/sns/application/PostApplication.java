@@ -85,7 +85,7 @@ public class PostApplication implements PostService {
   }
 
   @Override
-  @Transactional(readOnly = true)
+  @Transactional
   public PostResponse getPost(Long postId) {
     // 조회 시 recordView 메서드 호출 조회수 증가 + 점수 재계산
     recordView(postId);
