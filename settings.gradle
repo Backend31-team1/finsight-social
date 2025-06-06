@@ -5,7 +5,6 @@ include 'price-service'
 include 'order-service'
 include 'report-service'
 include 'tax-service'
-include 'notification-service'
 include 'sns-service'
 include 'common'
 

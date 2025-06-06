@@ -12,6 +12,9 @@ public interface PortfolioAssetRepository extends JpaRepository<PortfolioAsset, 
     // 1) 특정 포트폴리오에 속한 모든 PortfolioAsset 조회
     List<PortfolioAsset> findAllByPortfolio_PortfolioId(Long portfolioId);
 
+    boolean existsByPortfolio_PortfolioIdAndSymbol(Long portfolioId, String symbol);
+
+
     @Modifying
     @Query("DELETE FROM PortfolioAsset pa WHERE pa.portfolio.portfolioId = :portfolioId")
     void deleteByPortfolioId(@Param("portfolioId") Long portfolioId);

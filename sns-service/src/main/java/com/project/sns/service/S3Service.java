@@ -41,7 +41,6 @@ public class S3Service {
       PutObjectRequest putObjReq = PutObjectRequest.builder()
           .bucket(bucketName)
           .key(key)
-          .acl("public-read")
           .contentType(file.getContentType())
           .contentLength(file.getSize())
           .build();

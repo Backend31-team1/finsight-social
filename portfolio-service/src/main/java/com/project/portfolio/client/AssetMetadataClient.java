@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 )
 public interface AssetMetadataClient {
 
-  @GetMapping("/api/meta/{symbol}")
+  @GetMapping("/api/metadata/{symbol}")
   AssetMetadataDto getOrFetch(@PathVariable("symbol") String symbol);
 
 }

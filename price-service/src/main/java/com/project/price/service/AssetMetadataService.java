@@ -25,6 +25,7 @@ public class AssetMetadataService {
    * DB에 있으면 반환 , 없으면 API 호출 후 저장
    */
   public AssetMetadata getOrFetch(String symbol) {
+
     return repository.findById(symbol)
         .orElseGet(() -> fetchAndSave(symbol));
   }
