@@ -1,29 +1,33 @@
+# src/main/resources/application.yml
 spring:
-  config:
-    import: optional:classpath:application-secret.yml
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/finsight
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    show-sql: ${SPRING_JPA_SHOW_SQL:true}
     properties:
       hibernate:
-        format_sql: true
-  # WebSocket 세부 설정
+        format_sql: ${SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL:true}
+
   websocket:
-    allowed-origins: "*"
+    allowed-origins: ${SPRING_WEBSOCKET_ALLOWED_ORIGINS:*}
 
   task:
     scheduling:
       pool:
-        size: 5
-      thread-name-prefix: "sched-"
-      timezone: Asia/Seoul
+        size: ${SPRING_TASK_SCHEDULING_POOL_SIZE:5}
+      thread-name-prefix: ${SPRING_TASK_SCHEDULING_THREAD_NAME_PREFIX:sched-}
+      timezone: ${SPRING_TASK_SCHEDULING_TIMEZONE:Asia/Seoul}
 
   cloud:
     openfeign:
@@ -35,27 +39,24 @@ spring:
         access-key: ${AWS_ACCESS_KEY_ID}
         secret-key: ${AWS_SECRET_ACCESS_KEY}
       region:
-        static: ap-northeast-2
+        static: ${AWS_REGION:ap-northeast-2}
       s3:
-        bucket: finsight-social-project
-        profile-folder: team-project/profiles
+        bucket: ${AWS_S3_BUCKET}
+        profile-folder: ${AWS_S3_PROFILE_FOLDER}
 
 app:
-  # 배포시에는 배포 IP로 할당되도록 변경
-  base-url: http://localhost:${server.port}
+  base-url: "${APP_BASE_URL:http://localhost:${SERVER_PORT:8085}}"
 
-# 공통 프로퍼티
 server:
-  port: 8085
+  port: ${SERVER_PORT:8085}
 
 jwt:
-  secret: ${jwt.secret}
+  secret: ${JWT_SECRET}
 
-# Finnhub API 호출 기본 URL (키는 secret.yml)
 finnhub:
-  base-url: https://finnhub.io/api/v1
+  base-url: ${FINNHUB_BASE_URL:https://finnhub.io/api/v1}
 
 logging:
   level:
-    root: INFO
-    org.springframework.web: DEBUG
+    root: ${LOGGING_LEVEL_ROOT:INFO}
+    org.springframework.web: ${LOGGING_LEVEL_SPRING_WEB:DEBUG}

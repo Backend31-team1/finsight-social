@@ -1,0 +1,53 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build-and-push:
+    name: Build & Push Docker Images to ECR
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Log in to ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build & Push Docker images
+        run: |
+          SERVICES=(auth-service portfolio-service price-service order-service report-service tax-service sns-service)
+          for S in "${SERVICES[@]}"; do
+            docker build \
+              -t ${{ secrets.ECR_REGISTRY }}/$S:latest \
+              -f $S/Dockerfile \
+              .
+            docker push ${{ secrets.ECR_REGISTRY }}/$S:latest
+          done
+
+  deploy-to-ec2:
+    name: Deploy to EC2 via SSH
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup SSH key
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > deploy_key.pem
+          chmod 600 deploy_key.pem
+
+      - name: SSH and run deploy script
+        run: |
+          ssh -o StrictHostKeyChecking=no -i deploy_key.pem \
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          cd ~/finsight
+          ./deploy.sh
+          EOF
