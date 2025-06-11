@@ -113,6 +113,7 @@ services:
     networks:
       - finsight-network
 
+
   price-service:
     image: "${ECR_REGISTRY_URL}/price-service:${IMAGE_TAG}"
     container_name: price-service
