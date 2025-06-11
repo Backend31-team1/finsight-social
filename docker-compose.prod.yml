@@ -13,7 +13,7 @@ services:
     ports:
       - "5432:5432"
     env_file:
-      - .env.production
+      - .env
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:
@@ -24,7 +24,7 @@ services:
     container_name: finsight-es
     restart: unless-stopped
     env_file:
-      - .env.production
+      - .env
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
@@ -92,9 +92,11 @@ services:
     container_name: auth-service
     restart: unless-stopped
     env_file:
-      - .env.production
+      - .env
     depends_on:
       - db
+    ports:
+      - "8081:8080"
     networks:
       - finsight-network
 
@@ -103,9 +105,11 @@ services:
     container_name: portfolio-service
     restart: unless-stopped
     env_file:
-      - .env.production
+      - .env
     depends_on:
       - db
+    ports:
+      - "8082:8080"
     networks:
       - finsight-network
 
@@ -113,8 +117,10 @@ services:
     image: "${ECR_REGISTRY_URL}/price-service:${IMAGE_TAG}"
     container_name: price-service
     restart: unless-stopped
+    ports:
+      - "8083:8080"
     env_file:
-      - .env.production
+      - .env
     depends_on:
       - db
     networks:
@@ -124,8 +130,10 @@ services:
     image: "${ECR_REGISTRY_URL}/order-service:${IMAGE_TAG}"
     container_name: order-service
     restart: unless-stopped
+    ports:
+      - "8084:8080"
     env_file:
-      - .env.production
+      - .env
     depends_on:
       - db
       - kafka
@@ -136,8 +144,10 @@ services:
     image: "${ECR_REGISTRY_URL}/report-service:${IMAGE_TAG}"
     container_name: report-service
     restart: unless-stopped
+    ports:
+      - "8085:8080"
     env_file:
-      - .env.production
+      - .env
     depends_on:
       - db
     networks:
@@ -147,8 +157,10 @@ services:
     image: "${ECR_REGISTRY_URL}/tax-service:${IMAGE_TAG}"
     container_name: tax-service
     restart: unless-stopped
+    ports:
+      - "8086:8080"
     env_file:
-      - .env.production
+      - .env
     depends_on:
       - db
     networks:
@@ -158,8 +170,10 @@ services:
     image: "${ECR_REGISTRY_URL}/sns-service:${IMAGE_TAG}"
     container_name: sns-service
     restart: unless-stopped
+    ports:
+      - "8087:8080"
     env_file:
-      - .env.production
+      - .env
     depends_on:
       - db
       - redis
