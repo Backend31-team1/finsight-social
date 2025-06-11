@@ -37,7 +37,7 @@ spring:
         dialect: ${SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
 
 app:
-  base-url: "${APP_BASE_URL:http://localhost:${SERVER_PORT:8080}}"
+  base-url: "${APP_BASE_URL:http://52.79.38.106:8081}}"
 
 admin:
   email: ${ADMIN_EMAIL}
