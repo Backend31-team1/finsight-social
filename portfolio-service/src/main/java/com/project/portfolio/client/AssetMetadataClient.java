@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(
     name = "price-service",
-    url = "${price-service.url}",
+    url = "${PRICE_SERVICE_URL}",
     configuration = com.project.common.config.FeignClientConfiguration.class
 )
 public interface AssetMetadataClient {
