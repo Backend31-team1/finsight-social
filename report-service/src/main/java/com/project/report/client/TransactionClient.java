@@ -10,7 +10,7 @@ import java.util.List;
 
 @FeignClient(
         name = "price-service",
-        url = "http://localhost:8085",
+        url = "${PRICE_SERVICE_URL}",
         configuration = FeignClientConfiguration.class
 )
 public interface TransactionClient {

@@ -10,7 +10,7 @@ import java.util.List;
 
 @FeignClient(
         name = "report-service",
-        url = "http://localhost:8086",
+        url = "${REPORT_SERVICE_URL}",
         configuration = FeignClientConfiguration.class
 )
 public interface ProfitItemClient {

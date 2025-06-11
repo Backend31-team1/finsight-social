@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
                 version = "v1.0.0",
                 description = "계좌 및 종목 관련 API 문서",
                 contact = @Contact(
-                        name = "고희재",
-                        email = "rhgmlwo11@gmail.com"
+                        name = "김재혁",
+                        email = "jaehyeok.ethan@gmail.com"
                 )
         )
 )

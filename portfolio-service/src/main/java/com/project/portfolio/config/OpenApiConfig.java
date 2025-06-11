@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "Auth Service API",
+                title = "Portfolio Service API",
                 version = "v1.0.0",
                 description = "포트폴리오 API 문서",
                 contact = @Contact(
