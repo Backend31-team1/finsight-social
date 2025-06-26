@@ -13,14 +13,14 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth/portfolio/{portfolioId}/assets")
+@RequestMapping("/api/portfolio/{portfolioId}/assets")
 public class PortfolioAssetController {
 
   private final PortfolioAssetService assetService;
 
   /**
    * 포트폴리오에 종목 추가
-   * Body: { "symbol": "AAPL" }
+   * POST /api/portfolio/{portfolioId}/assets
    */
   @PostMapping
   public ResponseEntity<Void> addAsset(
@@ -35,6 +35,7 @@ public class PortfolioAssetController {
 
   /**
    * 포트폴리오에 담긴 종목 전체 조회
+   * GET /api/portfolio/{portfolioId}/assets
    */
   @GetMapping
   public ResponseEntity<List<AssetMetadataResponse>> listAssets(
@@ -47,7 +48,8 @@ public class PortfolioAssetController {
   }
 
   /**
-   * 3) 포트폴리오에서 특정 종목 제거
+   * 포트폴리오에서 특정 종목 제거
+   * DELETE /api/portfolio/{portfolioId}/assets/{portfolioAssetId}
    */
   @DeleteMapping("/{portfolioAssetId}")
   public ResponseEntity<Void> removeAsset(
@@ -59,4 +61,3 @@ public class PortfolioAssetController {
     return ResponseEntity.ok().build();
   }
 }
-

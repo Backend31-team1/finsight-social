@@ -1,3 +1,4 @@
+// NotificationController.java
 package com.project.sns.controller;
 
 import com.project.sns.dto.NotificationResponseDto;
@@ -10,19 +11,22 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/notifications")
+@RequestMapping("/api/sns/notifications")
 public class NotificationController {
 
   private final NotificationService notificationService;
 
+  /**
+   * GET /api/sns/notifications : 내 알림 조회
+   */
   @GetMapping
   public ResponseEntity<List<NotificationResponseDto>> getMyNotifications() {
-    Long mockUserId = 1L; // 임시 사용자 ID (로그인 연동 전)
-    List<NotificationResponseDto> notifications = notificationService.getUserNotifications(mockUserId);
-    return ResponseEntity.ok(notifications);
+    return ResponseEntity.ok(notificationService.getUserNotifications(1L)); // 임시 userId
   }
 
-  // 읽음 처리 API
+  /**
+   * PATCH /api/sns/notifications/{id}/read : 알림 읽음 처리
+   */
   @PatchMapping("/{id}/read")
   public ResponseEntity<String> markAsRead(@PathVariable("id") Long id) {
     notificationService.markAsRead(id);

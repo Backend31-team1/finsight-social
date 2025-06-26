@@ -9,18 +9,25 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/auth/cash-account")
+@RequestMapping("/api/price/cash-account")
 @RequiredArgsConstructor
 public class CashAccountController {
+
     private final CashAccountService cashAccountService;
 
-    //계좌 생성
+    /**
+     * 계좌 생성
+     * POST /api/price/cash-account/create
+     */
     @PostMapping("/create")
     public ResponseEntity<CashAccountDto> create(@RequestParam Long userId) {
         return ResponseEntity.ok(cashAccountService.createAccount(userId));
     }
 
-    //계좌 조회
+    /**
+     * 계좌 조회
+     * GET /api/price/cash-account/list?userId={userId}
+     */
     @GetMapping("/list")
     public ResponseEntity<List<CashAccountDto>> getAccountsByUser(@RequestParam Long userId) {
         return ResponseEntity.ok(cashAccountService.getAccountsByUserId(userId));

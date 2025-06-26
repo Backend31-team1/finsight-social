@@ -1,21 +1,22 @@
+// PostMigrationController.java
 package com.project.sns.controller;
 
 import com.project.sns.service.PostMigrationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/migrate")
+@RequestMapping("/api/sns/migrate")
 public class PostMigrationController {
 
     private final PostMigrationService postMigrationService;
 
-    // 게시글 마이그레이션
+    /**
+     * POST /api/sns/migrate/posts
+     */
     @PostMapping("/posts")
     public String migratePosts() {
         try {

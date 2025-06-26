@@ -1,3 +1,4 @@
+// ChatController.java
 package com.project.sns.controller;
 
 import com.project.sns.dto.ChatMessageRequest;
@@ -15,12 +16,16 @@ public class ChatController {
     private final MessageService messageService;
     private final SimpMessagingTemplate messagingTemplate;
 
-    // 메세지 전송
-    @MessageMapping("/chat.send")
+    /**
+     * STOMP 메시지 수신: /app/sns/chat/send
+     */
+    @MessageMapping("/sns/chat/send")
     public void handleChatMessage(ChatMessageRequest request) {
         ChatMessageResponse response = messageService.saveAndBuildResponse(request);
-
         // 구독 중인 사람들에게 메시지 전송
-        messagingTemplate.convertAndSend("/topic/room/" + request.getRoomId(), response);
+        messagingTemplate.convertAndSend(
+            "/topic/sns/room/" + request.getRoomId(),
+            response
+        );
     }
 }

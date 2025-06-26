@@ -1,19 +1,15 @@
 version: '3.8'
 
 services:
-  ###############################################
-  #  환경변수 파일 로드
-  #  EC2에 배포할 때, GitHub Actions가
-  #  .env.production 파일을 EC2로 복사해줌
-  ###############################################
   db:
     image: postgres:15
     container_name: finsight-db
     restart: unless-stopped
-    ports:
-      - "5432:5432"
-    env_file:
-      - .env
+    ports: [ "5432:5432" ]
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: finsight
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:
@@ -23,15 +19,12 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.7.0
     container_name: finsight-es
     restart: unless-stopped
-    env_file:
-      - .env
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
       - xpack.security.http.ssl.enabled=false
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    ports:
-      - "9200:9200"
+    ports: [ "9200:9200" ]
     volumes:
       - es-data:/usr/share/elasticsearch/data
     networks:
@@ -44,8 +37,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - "2181:2181"
+    ports: [ "2181:2181" ]
     networks:
       - finsight-network
 
@@ -53,8 +45,7 @@ services:
     image: confluentinc/cp-kafka:7.5.0
     container_name: finsight-kafka
     restart: unless-stopped
-    ports:
-      - "9092:9092"
+    ports: [ "9092:9092" ]
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -71,8 +62,7 @@ services:
     image: redis:7.2.4
     container_name: finsight-redis
     restart: unless-stopped
-    ports:
-      - "6379:6379"
+    ports: [ "6379:6379" ]
     command: redis-server --appendonly yes
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -84,104 +74,85 @@ services:
     networks:
       - finsight-network
 
-  ###############################################
-  # 2) 애플리케이션 서비스 – ECR 에서 Pull
-  ###############################################
   auth-service:
     image: "${ECR_REGISTRY_URL}/auth-service:${IMAGE_TAG}"
     container_name: auth-service
     restart: unless-stopped
-    env_file:
-      - .env
-    depends_on:
-      - db
-    ports:
-      - "8081:8080"
-    networks:
-      - finsight-network
+    env_file: [ .env ]
+    depends_on: [ db ]
+    expose: [ "8080" ]
+    networks: [ finsight-network ]
 
   portfolio-service:
     image: "${ECR_REGISTRY_URL}/portfolio-service:${IMAGE_TAG}"
     container_name: portfolio-service
     restart: unless-stopped
-    env_file:
-      - .env
-    depends_on:
-      - db
-    ports:
-      - "8082:8080"
-    networks:
-      - finsight-network
-
+    env_file: [ .env ]
+    depends_on: [ db ]
+    expose: [ "8080" ]
+    networks: [ finsight-network ]
 
   price-service:
     image: "${ECR_REGISTRY_URL}/price-service:${IMAGE_TAG}"
     container_name: price-service
     restart: unless-stopped
-    ports:
-      - "8083:8080"
-    env_file:
-      - .env
-    depends_on:
-      - db
-    networks:
-      - finsight-network
+    env_file: [ .env ]
+    depends_on: [ db ]
+    expose: [ "8080" ]
+    networks: [ finsight-network ]
 
   order-service:
     image: "${ECR_REGISTRY_URL}/order-service:${IMAGE_TAG}"
     container_name: order-service
     restart: unless-stopped
-    ports:
-      - "8084:8080"
-    env_file:
-      - .env
-    depends_on:
-      - db
-      - kafka
-    networks:
-      - finsight-network
+    env_file: [ .env ]
+    depends_on: [ db, kafka ]
+    expose: [ "8080" ]
+    networks: [ finsight-network ]
 
   report-service:
     image: "${ECR_REGISTRY_URL}/report-service:${IMAGE_TAG}"
     container_name: report-service
     restart: unless-stopped
-    ports:
-      - "8085:8080"
-    env_file:
-      - .env
-    depends_on:
-      - db
-    networks:
-      - finsight-network
+    env_file: [ .env ]
+    depends_on: [ db ]
+    expose: [ "8080" ]
+    networks: [ finsight-network ]
 
   tax-service:
     image: "${ECR_REGISTRY_URL}/tax-service:${IMAGE_TAG}"
     container_name: tax-service
     restart: unless-stopped
-    ports:
-      - "8086:8080"
-    env_file:
-      - .env
-    depends_on:
-      - db
-    networks:
-      - finsight-network
+    env_file: [ .env ]
+    depends_on: [ db ]
+    expose: [ "8080" ]
+    networks: [ finsight-network ]
 
   sns-service:
     image: "${ECR_REGISTRY_URL}/sns-service:${IMAGE_TAG}"
     container_name: sns-service
     restart: unless-stopped
-    ports:
-      - "8087:8080"
-    env_file:
-      - .env
+    env_file: [ .env ]
+    depends_on: [ db, redis, kafka, elasticsearch ]
+    expose: [ "8080" ]
+    networks: [ finsight-network ]
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: finsight-nginx
+    restart: unless-stopped
+    ports: [ "80:80" ]
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-      - db
-      - redis
-      - kafka
-      - elasticsearch
-    networks:
-      - finsight-network
+      - auth-service
+      - portfolio-service
+      - price-service
+      - order-service
+      - report-service
+      - tax-service
+      - sns-service
+    networks: [ finsight-network ]
 
 volumes:
   db-data:

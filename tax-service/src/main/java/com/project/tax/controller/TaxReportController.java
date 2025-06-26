@@ -7,15 +7,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth/tax-report")
+@RequestMapping("/api/tax-report")
 @RequiredArgsConstructor
 public class TaxReportController {
 
     private final TaxReportService taxReportService;
 
-    // 세금 보고서 조회
+    /**
+     * GET /api/tax-report/generate?userId={userId}
+     */
     @GetMapping("/generate")
     public ResponseEntity<TaxReport> generate(@RequestParam Long userId) {
-        return ResponseEntity.ok(taxReportService.generateAndSaveAnnualTaxReport(userId));
+        return ResponseEntity.ok(
+            taxReportService.generateAndSaveAnnualTaxReport(userId)
+        );
     }
 }

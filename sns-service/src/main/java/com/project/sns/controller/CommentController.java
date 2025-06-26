@@ -1,3 +1,4 @@
+// CommentController.java
 package com.project.sns.controller;
 
 import com.project.common.UserVo;
@@ -12,49 +13,42 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 댓글 API 요청을 처리하는 컨트롤러 클래스입니다.
- */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/posts/{postId}/comments")
+@RequestMapping("/api/sns/posts/{postId}/comments")
 public class CommentController {
 
   private final CommentService commentService;
 
   /**
-   * 댓글 또는 대댓글을 등록합니다.
-   *
-   * @param postId 게시글 ID
-   * @param request 댓글 요청 데이터
-   * @return 작성 완료 메시지
+   * POST /api/sns/posts/{postId}/comments : 댓글 또는 대댓글 등록
    */
   @PostMapping
-  public ResponseEntity<String> createComment(@PathVariable Long postId,
-      @RequestBody CommentRequestDto request) {
-    Long mockUserId = 1L; // 로그인 연동 전이므로 임시 고정
-    commentService.createComment(postId, mockUserId, request);
+  public ResponseEntity<String> createComment(
+      @PathVariable Long postId,
+      @RequestBody CommentRequestDto request
+  ) {
+    // 로그인 연동 전이라 임시 userId 사용
+    commentService.createComment(postId, 1L, request);
     return ResponseEntity.ok("댓글 작성 완료");
   }
 
   /**
-   * 특정 게시글의 댓글/대댓글 목록을 조회합니다.
-   *
-   * @param postId 게시글 ID
-   * @return 댓글 응답 리스트
+   * GET /api/sns/posts/{postId}/comments : 댓글 목록 조회
    */
   @GetMapping
   public ResponseEntity<List<CommentResponseDto>> getComments(@PathVariable Long postId) {
     return ResponseEntity.ok(commentService.getComments(postId));
   }
 
+  /**
+   * POST /api/sns/posts/{postId}/comments/{commentId}/like : 좋아요 토글
+   */
   @PostMapping("/{commentId}/like")
   public ResponseEntity<Map<String, Object>> toggleCommentLike(
-          @PathVariable Long commentId,
-          @AuthenticationPrincipal UserVo user
+      @PathVariable Long commentId,
+      @AuthenticationPrincipal UserVo user
   ) {
-    Long userId = user.getId();
-    Map<String, Object> result = commentService.toggleCommentLike(commentId, userId);
-    return ResponseEntity.ok(result);
+    return ResponseEntity.ok(commentService.toggleCommentLike(commentId, user.getId()));
   }
 }

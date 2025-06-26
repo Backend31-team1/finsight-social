@@ -8,14 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * 시장가 주문 API 컨트롤러
- *
- * @author ㅇㅇ
- */
 @RestController
+@RequestMapping("/api/order")
 @RequiredArgsConstructor
-@RequestMapping("/orders")
 public class OrderController {
 
   private final MarketOrderService marketOrderService;
@@ -24,8 +19,7 @@ public class OrderController {
   /**
    * 시장가 주문을 생성합니다.
    *
-   * @param request - 주문 요청 정보
-   * @return 생성된 주문 정보
+   * POST /api/order/market
    */
   @PostMapping("/market")
   public ResponseEntity<Order> placeMarketOrder(@RequestBody OrderRequest request) {
@@ -36,8 +30,7 @@ public class OrderController {
   /**
    * 지정가 주문을 생성합니다.
    *
-   * @param request - 주문 요청 정보
-   * @return 생성된 주문 정보
+   * POST /api/order/limit
    */
   @PostMapping("/limit")
   public ResponseEntity<Order> placeLimitOrder(@RequestBody OrderRequest request) {

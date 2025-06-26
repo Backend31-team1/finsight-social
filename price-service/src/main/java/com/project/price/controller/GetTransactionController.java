@@ -9,15 +9,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/auth/transaction")
+@RequestMapping("/api/price/transaction")
 @RequiredArgsConstructor
 public class GetTransactionController {
 
     private final GetTransactionService getTransactionService;
 
-    // 다건 조회
+    /**
+     * 다건 조회
+     * POST /api/price/transaction/batch
+     */
     @PostMapping("/batch")
-    public ResponseEntity<List<TransactionDto>> getTransactionsByIds(@RequestBody List<Long> transactionIds) {
+    public ResponseEntity<List<TransactionDto>> getTransactionsByIds(
+        @RequestBody List<Long> transactionIds
+    ) {
         return ResponseEntity.ok(getTransactionService.getTransactionsByIds(transactionIds));
     }
 }

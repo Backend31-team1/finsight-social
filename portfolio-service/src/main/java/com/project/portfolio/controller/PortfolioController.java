@@ -13,35 +13,44 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth/portfolio")
+@RequestMapping("/api/portfolio")
 public class PortfolioController {
 
     private final PortfolioService portfolioService;
 
-    // 포트폴리오 생성
+    /**
+     * 포트폴리오 생성
+     * POST /api/portfolio/create
+     */
     @PostMapping("/create")
     public ResponseEntity<String> createPortfolio(
-            @AuthenticationPrincipal UserVo user,
-            @RequestBody PortfolioCreationDto request
+        @AuthenticationPrincipal UserVo user,
+        @RequestBody PortfolioCreationDto request
     ) {
         portfolioService.createPortfolio(user.getId(), request);
         return ResponseEntity.ok("포트폴리오 생성 성공");
     }
 
-    // 포트폴리오 리스트 조회
+    /**
+     * 포트폴리오 리스트 조회
+     * GET /api/portfolio/list
+     */
     @GetMapping("/list")
     public ResponseEntity<List<PortfolioResponseDto>> getSimplePortfolioList(
-            @AuthenticationPrincipal UserVo user
+        @AuthenticationPrincipal UserVo user
     ) {
         List<PortfolioResponseDto> result = portfolioService.getSimplePortfolios(user.getId());
         return ResponseEntity.ok(result);
     }
 
-    // 포트폴리오 삭제
+    /**
+     * 포트폴리오 삭제
+     * DELETE /api/portfolio/{portfolioId}
+     */
     @DeleteMapping("/{portfolioId}")
     public ResponseEntity<Void> deletePortfolio(
-            @AuthenticationPrincipal UserVo user,
-            @PathVariable Long portfolioId
+        @AuthenticationPrincipal UserVo user,
+        @PathVariable Long portfolioId
     ) {
         portfolioService.deletePortfolio(user.getId(), portfolioId);
         return ResponseEntity.ok().build();
