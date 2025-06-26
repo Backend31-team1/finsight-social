@@ -59,3 +59,23 @@ logging:
   level:
     root: ${LOGGING_LEVEL_ROOT:INFO}
     org.springframework.web: ${LOGGING_LEVEL_SPRING_WEB:DEBUG}
+
+#Swagger UI
+springdoc:
+  swagger-ui:
+    urls:
+      - name: Auth
+        url: /api/auth/v3/api-docs
+      - name: Portfolio
+        url: /api/portfolio/v3/api-docs
+      - name: Price
+        url: /api/price/v3/api-docs
+      - name: Order
+        url: /api/order/v3/api-docs
+      - name: Report
+        url: /api/report/v3/api-docs
+      - name: Tax
+        url: /api/tax-report/v3/api-docs
+      - name: SNS
+        url: /api/sns/v3/api-docs
+
