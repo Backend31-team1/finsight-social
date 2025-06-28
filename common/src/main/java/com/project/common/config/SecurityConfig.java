@@ -45,6 +45,9 @@ public class SecurityConfig {
             .authenticationEntryPoint(entryPoint)
             .accessDeniedHandler(deniedHandler))
         .authorizeHttpRequests(auth -> auth
+            // 0) Actuator health/info 공개
+            .requestMatchers("/actuator/health", "/actuator/info").permitAll()
+
             // 1) Swagger UI & OpenAPI 공개
             .requestMatchers(
                 "/swagger-ui.html",
