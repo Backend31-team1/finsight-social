@@ -1,3 +1,4 @@
+
   spring:
     application:
       name: tax-service
@@ -45,9 +46,15 @@
   app:
     base-url: "${APP_BASE_URL:http://localhost:${SERVER_PORT:8080}}"
 
+  # 인증 서비스 URL
   auth:
     service:
       url: ${AUTH_SERVICE_URL}
+
+  # 리포트 서비스 호출용 URL
+  report:
+    service:
+      url: ${REPORT_SERVICE_URL}
 
   server:
     port: ${SERVER_PORT:8080}

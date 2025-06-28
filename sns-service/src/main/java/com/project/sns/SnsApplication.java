@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@SpringBootApplication(scanBasePackages = {"com.project.sns", "com.project.common"})
+@SpringBootApplication(scanBasePackages = {"com.project.sns", "com.project.common.config"})
 @EnableFeignClients
 public class SnsApplication {
 

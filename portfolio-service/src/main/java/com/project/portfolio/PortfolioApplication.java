@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 
-@SpringBootApplication(scanBasePackages = {"com.project.portfolio", "com.project.common"})
+@SpringBootApplication(scanBasePackages = {"com.project.portfolio", "com.project.common.config"})
 @EnableFeignClients(basePackages = "com.project.portfolio.client")
 public class PortfolioApplication {
 
