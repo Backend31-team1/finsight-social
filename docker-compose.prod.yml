@@ -96,11 +96,11 @@ services:
     depends_on: [ db ]
     expose: [ "8080" ]
     networks: [ finsight-network ]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
 
   portfolio-service:
     image: "${ECR_REGISTRY_URL}/portfolio-service:${IMAGE_TAG}"
@@ -123,11 +123,11 @@ services:
     depends_on: [ db, auth-service ]
     expose: [ "8080" ]
     networks: [ finsight-network ]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
 
   price-service:
     image: "${ECR_REGISTRY_URL}/price-service:${IMAGE_TAG}"
@@ -149,11 +149,11 @@ services:
     depends_on: [ db, auth-service ]
     expose: [ "8080" ]
     networks: [ finsight-network ]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
 
   order-service:
     image: "${ECR_REGISTRY_URL}/order-service:${IMAGE_TAG}"
@@ -176,11 +176,11 @@ services:
     depends_on: [ db, kafka, auth-service ]
     expose: [ "8080" ]
     networks: [ finsight-network ]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
 
   report-service:
     image: "${ECR_REGISTRY_URL}/report-service:${IMAGE_TAG}"
@@ -202,11 +202,11 @@ services:
     depends_on: [ db, auth-service ]
     expose: [ "8080" ]
     networks: [ finsight-network ]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
 
   tax-service:
     image: "${ECR_REGISTRY_URL}/tax-service:${IMAGE_TAG}"
@@ -228,11 +228,11 @@ services:
     depends_on: [ db, auth-service ]
     expose: [ "8080" ]
     networks: [ finsight-network ]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
 
   sns-service:
     image: "${ECR_REGISTRY_URL}/sns-service:${IMAGE_TAG}"
@@ -257,11 +257,11 @@ services:
     depends_on: [ db, redis, kafka, elasticsearch, auth-service ]
     expose: [ "8080" ]
     networks: [ finsight-network ]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
 
   nginx:
     image: nginx:stable-alpine
