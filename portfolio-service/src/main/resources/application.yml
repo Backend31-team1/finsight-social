@@ -1,4 +1,12 @@
 spring:
+  application:
+    name: portfolio-service
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
   cloud:
     openfeign:
       okhttp:
@@ -31,8 +39,16 @@ spring:
 app:
   base-url: "${APP_BASE_URL:http://localhost:${SERVER_PORT:8080}}"
 
+auth:
+  service:
+    url: ${AUTH_SERVICE_URL}
+
+price:
+  service:
+    url: ${PRICE_SERVICE_URL}
+
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
 
 jwt:
   secret: ${JWT_SECRET}
@@ -42,5 +58,20 @@ logging:
     root: ${LOGGING_LEVEL_ROOT:INFO}
     org.springframework.web: ${LOGGING_LEVEL_SPRING_WEB:DEBUG}
 
-price-service:
-  url: ${PRICE_SERVICE_URL:http://localhost:8085}
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized

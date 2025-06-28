@@ -1,5 +1,6 @@
-# src/main/resources/application.yml
 spring:
+  application:
+    name: auth-service
   servlet:
     multipart:
       max-file-size: 10MB
@@ -28,7 +29,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
-    show-sql: ${SPRING_JPA_SHOW_SQL:true}
+    show-sql: ${SPRING_JPA_SHOW_SQL:false}
     properties:
       hibernate:
         jdbc:
@@ -37,7 +38,7 @@ spring:
         dialect: ${SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
 
 app:
-  base-url: "${APP_BASE_URL:http://52.79.38.106:8081}}"
+  base-url: "${APP_BASE_URL:http://localhost}"
 
 admin:
   email: ${ADMIN_EMAIL}
@@ -58,24 +59,41 @@ server:
 logging:
   level:
     root: ${LOGGING_LEVEL_ROOT:INFO}
-    org.springframework.web: ${LOGGING_LEVEL_SPRING_WEB:DEBUG}
+    org.springframework.web: ${LOGGING_LEVEL_SPRING_WEB:INFO}
 
-#Swagger UI
+# 관리 엔드포인트 설정
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# Swagger UI 통합 설정 (auth-service가 메인)
 springdoc:
+  api-docs:
+    path: /v3/api-docs
   swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
     urls:
-      - name: Auth
-        url: /api/auth/v3/api-docs
-      - name: Portfolio
+      - name: Auth Service
+        url: /v3/api-docs
+      - name: Portfolio Service
         url: /api/portfolio/v3/api-docs
-      - name: Price
+      - name: Price Service
         url: /api/price/v3/api-docs
-      - name: Order
+      - name: Order Service
         url: /api/order/v3/api-docs
-      - name: Report
+      - name: Report Service
         url: /api/report/v3/api-docs
-      - name: Tax
+      - name: Tax Service
         url: /api/tax-report/v3/api-docs
-      - name: SNS
+      - name: SNS Service
         url: /api/sns/v3/api-docs
-
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json

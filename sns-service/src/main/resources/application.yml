@@ -1,54 +1,87 @@
-spring:
-  cloud:
-    openfeign:
-      okhttp:
-        enabled: true
+  spring:
+    application:
+      name: sns-service
 
-    aws:
-      credentials:
-        access-key: ${AWS_ACCESS_KEY_ID}
-        secret-key: ${AWS_SECRET_ACCESS_KEY}
-      region:
-        static: ${AWS_REGION:ap-northeast-2}
-      s3:
-        # 게시물 사진 전용 S3 버킷
-        bucket: ${POST_IMAGES_S3_BUCKET}
-        # 해당 버킷의 공개 URL
-        base-url: ${POST_IMAGES_S3_BASE_URL}
+    profiles:
+      active: ${SPRING_PROFILES_ACTIVE:prod}
 
-  datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
-    driver-class-name: org.postgresql.Driver
+    servlet:
+      multipart:
+        max-file-size: 10MB
+        max-request-size: 10MB
 
-  jpa:
-    hibernate:
-      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
-    show-sql: ${SPRING_JPA_SHOW_SQL:true}
-    properties:
+    cloud:
+      openfeign:
+        okhttp:
+          enabled: true
+
+      aws:
+        credentials:
+          access-key: ${AWS_ACCESS_KEY_ID}
+          secret-key: ${AWS_SECRET_ACCESS_KEY}
+        region:
+          static: ${AWS_REGION:ap-northeast-2}
+        s3:
+          bucket: ${POST_IMAGES_S3_BUCKET}
+          base-url: ${POST_IMAGES_S3_BASE_URL}
+
+    datasource:
+      url: ${SPRING_DATASOURCE_URL}
+      username: ${SPRING_DATASOURCE_USERNAME}
+      password: ${SPRING_DATASOURCE_PASSWORD}
+      driver-class-name: org.postgresql.Driver
+
+    jpa:
       hibernate:
-        format_sql: ${SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL:true}
+        ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+      show-sql: ${SPRING_JPA_SHOW_SQL:true}
+      properties:
+        hibernate:
+          format_sql: ${SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL:true}
 
-  elasticsearch:
-    repositories:
-      enabled: ${ELASTICSEARCH_REPOSITORIES_ENABLED:true}
-    client:
-      reactive:
-        endpoints: "${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"
-    index:
-      auto-create: ${ELASTICSEARCH_INDEX_AUTO_CREATE:true}
 
-app:
-  base-url: "${APP_BASE_URL:http://localhost:${SERVER_PORT:8080}}"
 
-server:
-  port: 8080
+    kafka:
+      bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS}
 
-jwt:
-  secret: ${JWT_SECRET}
+    data:
+      redis:
+        host: ${SPRING_REDIS_HOST:redis}
+        port: ${SPRING_REDIS_PORT:6379}
 
-logging:
-  level:
-    root: ${LOGGING_LEVEL_ROOT:INFO}
-    org.springframework.web: ${LOGGING_LEVEL_SPRING_WEB:DEBUG}
+  app:
+    base-url: "${APP_BASE_URL:http://localhost:${SERVER_PORT:8080}}"
+
+  auth:
+    service:
+      url: ${AUTH_SERVICE_URL}
+
+  server:
+    port: ${SERVER_PORT:8080}
+
+  jwt:
+    secret: ${JWT_SECRET}
+
+  logging:
+    level:
+      root: ${LOGGING_LEVEL_ROOT:INFO}
+      org.springframework.web: ${LOGGING_LEVEL_SPRING_WEB:DEBUG}
+
+  springdoc:
+    api-docs:
+      path: /v3/api-docs
+    swagger-ui:
+      path: /swagger-ui.html
+      operations-sorter: alpha
+      tags-sorter: alpha
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health,info
+        base-path: /actuator
+    endpoint:
+      health:
+        show-details: when-authorized
+
