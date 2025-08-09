@@ -71,9 +71,6 @@ include 'common'
   * tax-service: `http://52.79.38.106:8086/swagger-ui/index.html`
   * sns-service: `http://52.79.38.106:8087/swagger-ui/index.html`
 
-## 구현 예시 대표 이미지
-
-*(이미지 삽입 예정)*
 
 ## 상세 구현 기능
 
